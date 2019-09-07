@@ -22,17 +22,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation libraries.kotlin
+    implementation libraries.kotlin_reflect
     implementation libraries.dagger
     implementation libraries.daggerSupport
     kapt libraries.daggerAndroidApt
     kapt libraries.daggerProcessor
+
+    implementation  libraries.butterKnife
+    kapt libraries.butterKnifeProcessor
+
+    implementation  libraries.retrofit
+    implementation  libraries.retrofit_gson
+
     implementation libraries.appcompat_v7
     implementation libraries.constraint_layout
+
     testImplementation libraries.junit
     androidTestImplementation libraries.android_test_runner
     androidTestImplementation libraries.espresso_core

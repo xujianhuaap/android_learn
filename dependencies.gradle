@@ -12,6 +12,8 @@ ext{
             constraint_layout     : '1.1.3',
             kotlin                : '1.3.31',
             dagger                : '2.16',
+            butterKnife           : '10.1.0',
+            retrofit              :'2.6.1',
 
             //For Test
             junit                 : '4.12',
@@ -23,11 +25,17 @@ ext{
 
     libraries=[
              // For App
-            kotlin                 :"org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+             kotlin                 :"org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
+             kotlin_reflect        :"org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}",
              dagger                : "com.google.dagger:dagger:${versions.dagger}",
              daggerSupport         : "com.google.dagger:dagger-android-support:${versions.dagger}",
              daggerProcessor       : "com.google.dagger:dagger-compiler:${versions.dagger}",
              daggerAndroidApt      : "com.google.dagger:dagger-android-processor:${versions.dagger}",
+            butterKnife            : "com.jakewharton:butterknife:${versions.butterKnife}",
+            butterKnifeProcessor   :"com.jakewharton:butterknife-compiler:${versions.butterKnife}",
+            retrofit               :"com.squareup.retrofit2:retrofit:${versions.retrofit}",
+            retrofit_gson          :"com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+
             appcompat_v7           :"com.android.support:appcompat-v7:${versions.android_support}",
             constraint_layout      :"com.android.support.constraint:constraint-layout:${versions.constraint_layout}",
             //ForTest
