@@ -1,12 +1,11 @@
 package com.skullmind.io.data
 
-import com.skullmind.io.main.GitHub
-import retrofit2.Call
+import com.skullmind.io.data.bean.GitHub
 import retrofit2.http.GET
-import retrofit2.http.Path
+import rx.Observable
 
 
 interface GitHubService {
     @GET("/")
-    fun listGitHub(): Call<GitHub>
+    fun listGitHub(): Observable<GitHub>
 }

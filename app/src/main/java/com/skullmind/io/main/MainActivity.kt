@@ -8,6 +8,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.skullmind.io.R
+import com.skullmind.io.data.bean.GitHub
 import dagger.android.AndroidInjection
 import retrofit2.Call
 import retrofit2.Response
@@ -29,20 +30,13 @@ class MainActivity : AppCompatActivity(),MainView{
 
     @OnClick(R.id.tv_content) fun clickContent(){
         presenter.showMessage("Hello Dagger")
-        presenter.requestGithubService(object:retrofit2.Callback<GitHub>{
-            override fun onFailure(call: Call<GitHub>, t: Throwable) {
-                Log.d(MainActivity::class.simpleName,"githubservice -> "+t?.message)
-            }
-
-            override fun onResponse(call: Call<GitHub>, response: Response<GitHub>) {
-                Log.d(MainActivity::class.simpleName,"githubservice -> "+response.body()?.code_search_url)
-                presenter.refreshContentView(response.body()?.authorizations_url)
-            }
-        })
+        presenter.requestGithubService{
+            refreshContentView(it?.code_search_url)
+        }
     }
 
     override fun initView() {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        tvContent.setText("hello dagger")
     }
 
     override fun refreshContentView(content: String?) {

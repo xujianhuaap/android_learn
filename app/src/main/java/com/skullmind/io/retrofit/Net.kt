@@ -2,6 +2,7 @@ package com.skullmind.io.retrofit
 
 import android.util.Log
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -18,6 +19,7 @@ private fun initRetrofit():Retrofit{
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.github.com/")
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .build()
     Log.d(Net::class.simpleName,"init retrofit")
     return retrofit

@@ -1,4 +1,4 @@
-package com.skullmind.io.main
+package com.skullmind.io.data.bean
 
 class GitHub {
 
