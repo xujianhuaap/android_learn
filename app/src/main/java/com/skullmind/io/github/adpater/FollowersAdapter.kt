@@ -6,15 +6,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.skullmind.io.R
 import com.skullmind.io.databinding.ItemGitHubBinding
+import com.skullmind.io.github.GitHubNavigator
 import com.skullmind.io.github.bean.User
+import javax.inject.Inject
 
 
-class FollowersAdapter() : RecyclerView.Adapter<FollowersAdapter.RepoAdapterViewHolder>() {
+class FollowersAdapter @Inject constructor(val navigator: GitHubNavigator) : RecyclerView.Adapter<FollowersAdapter.RepoAdapterViewHolder>() {
 
 
     private var repoList: List<User>? = null
-
-
 
     init {
         this.repoList = emptyList<User>()
@@ -22,6 +22,7 @@ class FollowersAdapter() : RecyclerView.Adapter<FollowersAdapter.RepoAdapterView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoAdapterViewHolder {
         val binding = DataBindingUtil.inflate<ItemGitHubBinding>(LayoutInflater.from(parent.context), R.layout.item_git_hub, parent, false)
+        binding.navigator = navigator
         return RepoAdapterViewHolder(binding)
     }
 

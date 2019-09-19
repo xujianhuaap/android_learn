@@ -6,8 +6,12 @@ import javax.inject.Inject
 
 class MainPresenter @Inject constructor(private val navigator: MainNavigator,
                                         private val binding:ActivityMainBinding){
-    fun showMessage(message:String)=navigator.showToast(message)
+    fun initData(){
+        binding.mainVM = MainViewModel("click me")
+        binding.presenter = this
+    }
 
+    fun showMessage(message:String)=navigator.showToast(message)
 
     fun clickTitle(view: View){
         var cnt = binding?.mainVM?.titleCnt?:0
@@ -18,5 +22,4 @@ class MainPresenter @Inject constructor(private val navigator: MainNavigator,
     fun clickToJumpGithub(view: View){
         navigator.jumpToGitHub()
     }
-
 }

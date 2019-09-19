@@ -12,7 +12,7 @@ interface GitHubService {
     @GET("/users/@{user}")
     fun reqGitHub(@Path(value = "user") name: String): Observable<GitHub>
 
-    @GET("/users/xujianhuaap/followers")
-    fun reqFollowers(): Observable<List<User>>
+    @GET("/users/{user}/followers")
+    fun reqFollowers(@Path("user")name: String): Observable<List<User>>
 
 }

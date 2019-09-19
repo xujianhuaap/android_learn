@@ -10,8 +10,6 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(){
 
-    @Inject
-    lateinit var binding:ActivityMainBinding
 
     @Inject
     lateinit var presenter: MainPresenter
@@ -20,8 +18,11 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        binding.mainVM = MainViewModel("click me")
-        binding.presenter = presenter
+        initData()
+    }
+
+    private fun initData() {
+        presenter.initData()
     }
 
 }

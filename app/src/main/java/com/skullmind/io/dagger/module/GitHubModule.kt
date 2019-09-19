@@ -23,5 +23,5 @@ class GitHubModule {
 
     @Provides
     @PerActivity
-    fun provideAdapter() = FollowersAdapter()
+    fun provideAdapter(navigator: GitHubNavigator) = FollowersAdapter(navigator)
 }

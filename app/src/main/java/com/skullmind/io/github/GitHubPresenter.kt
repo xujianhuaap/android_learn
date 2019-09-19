@@ -1,5 +1,6 @@
 package com.skullmind.io.github
 
+import android.view.View
 import com.skullmind.io.data.GitHubService
 import com.skullmind.io.databinding.ActivityGithubBinding
 import com.skullmind.io.github.adpater.FollowersAdapter
@@ -35,7 +36,7 @@ class  GitHubPresenter @Inject constructor(val binding: ActivityGithubBinding,
         }
     }
     fun reqFollowers(callback: (List<User>?)-> Unit){
-        Net.createService(GitHubService::class.java).reqFollowers()
+        Net.createService(GitHubService::class.java).reqFollowers(userName)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(object:Subscriber<List<User>>(){
