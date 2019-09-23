@@ -19,6 +19,7 @@ ext{
 
             //For Test
             junit                 : '4.12',
+            robolectric           : '4.3',
             android_support       : '28.0.0',
             recycler_view          : '1.0.0',
             android_test_runner   : '1.0.2',
@@ -46,6 +47,8 @@ ext{
             constraint_layout      :"com.android.support.constraint:constraint-layout:${versions.constraint_layout}",
             //ForTest
             junit                  :"junit:junit:${versions.junit}",
+             robolectric            :"org.robolectric:robolectric:${versions.robolectric}",
+            test_core               :"androidx.test:core:1.0.0-beta02",
             android_test_runner    :"com.android.support.test:runner:${versions.android_test_runner}",
             espresso_core:         "com.android.support.test.espresso:espresso-core:${versions.android_test_espresso}"
     ]
