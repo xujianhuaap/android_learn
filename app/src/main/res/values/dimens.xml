@@ -2,4 +2,6 @@
 <resources>
     <dimen name="dimen_main_activity_margin_top">10dp</dimen>
     <dimen name="layout_divider_height">1dp</dimen>
+
+    <dimen name="font_18_sp">18sp</dimen>
 </resources>

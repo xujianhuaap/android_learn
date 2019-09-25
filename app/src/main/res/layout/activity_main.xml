@@ -39,5 +39,7 @@
                 android:textSize="18sp"
                 android:onClick="@{presenter::clickToJumpGithub}"
                 android:text="@string/app_str_jump_next"/>
+        <include layout="@layout/include_cammara_view"
+                 app:vm="@{MainVM.openCammara}"></include>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

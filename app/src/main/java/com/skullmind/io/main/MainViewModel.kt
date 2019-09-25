@@ -3,6 +3,7 @@ package com.skullmind.io.main
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.skullmind.io.BR
+import com.skullmind.io.camera.CameraViewModel
 
 
 class MainViewModel(val title:String): BaseObservable(){
@@ -11,5 +12,12 @@ class MainViewModel(val title:String): BaseObservable(){
         set(value) {
             field = value
             notifyPropertyChanged(BR.titleCnt)
+        }
+
+    @get:Bindable
+    var openCammara:CameraViewModel?=null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.openCammara)
         }
 }
