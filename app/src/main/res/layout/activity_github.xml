@@ -3,7 +3,7 @@
     <data>
         <variable
                 name="vm"
-                type="com.skullmind.io.github.GitHubViewModel"/>
+                type="com.skullmind.io.github.GitHubModel"/>
     </data>
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

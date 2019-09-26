@@ -3,10 +3,10 @@
     <data>
         <variable
                 name="MainVM"
-                type="com.skullmind.io.main.MainViewModel"/>
+                type="com.skullmind.io.main.MainModel"/>
         <variable
                 name="presenter"
-                type="com.skullmind.io.main.MainPresenter"/>
+                type="com.skullmind.io.main.MainVM"/>
     </data>
     <androidx.appcompat.widget.LinearLayoutCompat
             xmlns:android="http://schemas.android.com/apk/res/android"

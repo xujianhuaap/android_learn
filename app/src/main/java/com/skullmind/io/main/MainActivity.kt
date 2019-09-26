@@ -2,9 +2,6 @@ package com.skullmind.io.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.skullmind.io.R
-import com.skullmind.io.databinding.ActivityMainBinding
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -12,7 +9,7 @@ class MainActivity : AppCompatActivity(){
 
 
     @Inject
-    lateinit var presenter: MainPresenter
+    lateinit var vm: MainVM
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +19,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initData() {
-        presenter.initData()
+        vm.initData()
     }
 
 }

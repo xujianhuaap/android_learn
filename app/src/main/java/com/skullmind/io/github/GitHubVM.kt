@@ -1,6 +1,5 @@
 package com.skullmind.io.github
 
-import android.view.View
 import com.skullmind.io.data.GitHubService
 import com.skullmind.io.databinding.ActivityGithubBinding
 import com.skullmind.io.github.adpater.FollowersAdapter
@@ -11,9 +10,9 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
-class  GitHubPresenter @Inject constructor(val binding: ActivityGithubBinding,
-                                           val navigator: GitHubNavigator,
-                                           val adapter: FollowersAdapter){
+class  GitHubVM @Inject constructor(val binding: ActivityGithubBinding,
+                                    val navigator: GitHubNavigator,
+                                    val adapter: FollowersAdapter){
     var userName:String = ""
 
     fun init(userName: String){
@@ -22,7 +21,7 @@ class  GitHubPresenter @Inject constructor(val binding: ActivityGithubBinding,
     }
     private fun initData(userName: String){
        this.userName = userName
-        val gitHubViewModel = GitHubViewModel(userName)
+        val gitHubViewModel = GitHubModel(userName)
          binding.vm = gitHubViewModel
     }
     private fun initView(){

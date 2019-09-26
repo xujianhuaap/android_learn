@@ -16,14 +16,14 @@ fun newIntentToGitHub(context: AppCompatActivity, userName:String): Intent {
 
 class GitHubActivity:AppCompatActivity(){
     @Inject
-    lateinit var presenter: GitHubPresenter
+    lateinit var vm: GitHubVM
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         initData()
-        presenter.updateFollowers()
+        vm.updateFollowers()
     }
 
 
@@ -34,7 +34,7 @@ class GitHubActivity:AppCompatActivity(){
     }
 
     private fun initPresenter(userName: String) {
-        presenter.init(userName)
+        vm.init(userName)
     }
 
 }

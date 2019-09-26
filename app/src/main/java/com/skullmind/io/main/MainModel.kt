@@ -6,7 +6,7 @@ import com.skullmind.io.BR
 import com.skullmind.io.camera.CameraViewModel
 
 
-class MainViewModel(val title:String): BaseObservable(){
+class MainModel(val title:String): BaseObservable(){
     @get:Bindable
     var titleCnt:Int = 0
         set(value) {
