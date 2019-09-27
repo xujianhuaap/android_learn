@@ -2,6 +2,8 @@ package com.skullmind.io.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.skullmind.io.camera.CameraModel
+import com.skullmind.io.databinding.ActivityMainBinding
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -9,8 +11,14 @@ class MainActivity : AppCompatActivity(){
 
 
     @Inject
-    lateinit var vm: MainVM
+    lateinit var binding: ActivityMainBinding
+    @Inject
+    lateinit var vm:MainVM
+    @Inject
+    lateinit var model: MainModel
 
+    @Inject
+    lateinit var cameraModel:CameraModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -19,7 +27,10 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initData() {
-        vm.initData()
+        binding.vm = this.vm
+        binding.model = this.model
+        binding.cameraModel = this.cameraModel
+        binding.vm!!.initData()
     }
 
 }

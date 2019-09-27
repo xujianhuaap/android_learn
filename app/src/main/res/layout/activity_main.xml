@@ -2,10 +2,13 @@
 <layout>
     <data>
         <variable
-                name="MainVM"
+                name="model"
                 type="com.skullmind.io.main.MainModel"/>
         <variable
-                name="presenter"
+                name="camera_model"
+                type="com.skullmind.io.camera.CameraModel"/>
+        <variable
+                name="vm"
                 type="com.skullmind.io.main.MainVM"/>
     </data>
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -22,24 +25,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="@{@string/app_str_click_cnt(MainVM.titleCnt)}"/>
+                android:text='@{@string/app_str_click_cnt(model.titleCnt,vm.getStatus(camera_model.openStatus))}'/>
         <Button
                 android:id="@+id/tv_title"
                 android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:onClick="@{presenter::clickTitle}"
-                android:text="@{MainVM.title}"/>
+                android:onClick="@{vm::clickTitle}"
+                android:text="@{model.title}"/>
         <Button
                 android:id="@+id/tv_jump"
                 android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:onClick="@{presenter::clickToJumpGithub}"
+                android:onClick="@{vm::clickToJumpGithub}"
                 android:text="@string/app_str_jump_next"/>
         <include layout="@layout/include_cammara_view"
-                 app:vm="@{MainVM.openCammara}"></include>
+                app:vm="@{vm}"></include>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
