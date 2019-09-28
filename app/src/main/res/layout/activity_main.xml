@@ -19,11 +19,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-        <TextView
+        <com.skullmind.io.view.FakeTextView
                 android:id="@+id/tv_click_count"
                 android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@{30}"
+                app:backgroundColor="@{@color/colorPrimary}"
                 android:textSize="18sp"
                 android:text='@{@string/app_str_click_cnt(model.titleCnt,vm.getStatus(camera_model.openStatus))}'/>
         <Button

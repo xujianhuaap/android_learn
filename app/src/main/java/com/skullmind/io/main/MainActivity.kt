@@ -3,6 +3,7 @@ package com.skullmind.io.main
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.BindingMethods
 import com.skullmind.io.camera.CameraModel
 import com.skullmind.io.databinding.ActivityMainBinding
 import com.skullmind.io.github.newIntentToGitHub

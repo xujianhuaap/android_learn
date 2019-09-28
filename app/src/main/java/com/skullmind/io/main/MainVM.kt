@@ -1,9 +1,10 @@
 package com.skullmind.io.main
 
 import android.view.View
+import androidx.databinding.BindingMethod
+import androidx.databinding.BindingMethods
 import com.skullmind.io.camera.CameraModel
 import javax.inject.Inject
-
 class MainVM @Inject constructor(private val model: MainModel,
                                  private val cameraModel: CameraModel ){
     fun initData(){
