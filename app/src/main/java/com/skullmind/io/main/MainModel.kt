@@ -20,4 +20,11 @@ class MainModel(): BaseObservable(){
             notifyPropertyChanged(BR.titleCnt)
         }
 
+    @get:Bindable
+    var userName:String = ""
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.userName)
+    }
+
 }

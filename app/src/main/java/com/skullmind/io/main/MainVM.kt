@@ -4,21 +4,15 @@ import android.view.View
 import com.skullmind.io.camera.CameraModel
 import javax.inject.Inject
 
-class MainVM @Inject constructor(private val navigator: MainNavigator,
-                                 private val model: MainModel,
+class MainVM @Inject constructor(private val model: MainModel,
                                  private val cameraModel: CameraModel ){
     fun initData(){
 
         model?.title = "click me"
     }
-    fun showMessage(message:String)=navigator.showToast(message)
     fun clickTitle(view: View){
         var cnt = model?.titleCnt?:0
         model?.titleCnt = ++cnt
-    }
-
-    fun clickToJumpGithub(view: View){
-        navigator.jumpToGitHub()
     }
 
     fun clCamera(view:View){

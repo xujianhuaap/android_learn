@@ -34,15 +34,20 @@
                 android:textSize="18sp"
                 android:onClick="@{vm::clickTitle}"
                 android:text="@{model.title}"/>
+        <include layout="@layout/include_camera_view"
+                app:vm="@{vm}"></include>
+        <EditText
+                android:id="@+id/edt_user_name"
+                android:layout_width="@dimen/activity_item_width"
+                android:layout_height="wrap_content"
+                android:hint="default"
+                android:text="@={model.userName}"/>
         <Button
                 android:id="@+id/tv_jump"
                 android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:onClick="@{vm::clickToJumpGithub}"
                 android:text="@string/app_str_jump_next"/>
-        <include layout="@layout/include_cammara_view"
-                app:vm="@{vm}"></include>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
