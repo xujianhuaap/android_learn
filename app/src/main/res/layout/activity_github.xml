@@ -2,7 +2,7 @@
 <layout>
     <data>
         <variable
-                name="vm"
+                name="model"
                 type="com.skullmind.io.github.GitHubModel"/>
     </data>
     <LinearLayout
@@ -20,12 +20,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="@{@string/app_str_current_user(vm.userName)}"/>
+                android:text="@{@string/app_str_current_user(model.userName)}"/>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyle_followers"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    app:data="@{model.users}">
 
             </androidx.recyclerview.widget.RecyclerView>
 

@@ -10,28 +10,17 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
-class  GitHubVM @Inject constructor(val binding: ActivityGithubBinding,
-                                    val navigator: GitHubNavigator,
-                                    val adapter: FollowersAdapter){
+class  GitHubVM @Inject constructor(val navigator: GitHubNavigator){
     var userName:String = ""
+    var model:GitHubModel? = null
 
-    fun init(userName: String){
-        initData(userName)
-        initView()
-    }
-    private fun initData(userName: String){
-       this.userName = userName
-        val gitHubViewModel = GitHubModel(userName)
-         binding.vm = gitHubViewModel
-    }
-    private fun initView(){
-        navigator.initRecylerViewLayoutManager(binding.recyleFollowers)
-        binding.recyleFollowers.adapter = adapter
-
+    fun init(userName: String,model: GitHubModel){
+        this.userName = userName
+        this.model = model
     }
     fun updateFollowers():Unit{
         reqFollowers {
-            adapter?.setRepoList(it?: emptyList())
+            model?.updateUsers(it!!,false)
         }
     }
     fun reqFollowers(callback: (List<User>?)-> Unit){
