@@ -8,13 +8,14 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
+                  android:id="@+id/ll_camera"
                   android:layout_height="wrap_content">
         <Button
+                android:id="@+id/btn_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="@dimen/font_18_sp"
-                android:onClick="@{vm::clCamera}"
                 android:text="click camera"/>
     </LinearLayout>
 </layout>

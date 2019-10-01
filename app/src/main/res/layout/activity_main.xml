@@ -36,7 +36,9 @@
                 android:textSize="18sp"
                 android:onClick="@{vm::clickTitle}"
                 android:text="@{model.title}"/>
-        <include layout="@layout/include_camera_view"
+        <include
+                layout="@layout/include_camera_view"
+                android:id="@+id/ll_camera"
                 app:vm="@{vm}"></include>
         <EditText
                 android:id="@+id/edt_user_name"

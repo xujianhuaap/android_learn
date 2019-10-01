@@ -3,8 +3,8 @@ package com.skullmind.io.main
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.BindingMethods
 import com.skullmind.io.camera.CameraModel
+import com.skullmind.io.camera.newIntentToCamera
 import com.skullmind.io.databinding.ActivityMainBinding
 import com.skullmind.io.github.newIntentToGitHub
 import dagger.android.AndroidInjection
@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity(){
         binding.tvJump.setOnClickListener {
             jumpToGitHub(model.userName)
         }
+        binding.llCamera.btnCamera.setOnClickListener{
+            jumpToCamera("Cannon")
+        }
+
     }
 
     private fun initData() {
@@ -47,6 +51,9 @@ class MainActivity : AppCompatActivity(){
 
     fun jumpToGitHub(userName:String){
         startActivity(newIntentToGitHub(this,userName))
+    }
+    fun jumpToCamera(cameraName:String){
+        startActivity(newIntentToCamera(this,cameraName))
     }
 
 }

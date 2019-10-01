@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".github.GitHubActivity"></activity>
+        <activity android:name=".camera.CameraActivity"></activity>
     </application>
 
 </manifest>

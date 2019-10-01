@@ -47,8 +47,8 @@ dependencies {
     kapt libraries.daggerAndroidApt
     kapt libraries.daggerProcessor
 
-//    implementation  libraries.butterKnife
-//    kapt libraries.butterKnifeProcessor
+    implementation  libraries.butterKnife
+    kapt libraries.butterKnifeProcessor
 
     implementation  libraries.retrofit
     implementation  libraries.retrofit_gson
@@ -58,6 +58,7 @@ dependencies {
     implementation libraries.appcompat_v7
     implementation libraries.constraint_layout
     implementation  libraries.recycler_view
+    implementation libraries.lifecycle
 
 
 
