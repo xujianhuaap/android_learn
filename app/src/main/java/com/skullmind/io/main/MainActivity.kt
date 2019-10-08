@@ -3,7 +3,6 @@ package com.skullmind.io.main
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.skullmind.io.camera.CameraModel
 import com.skullmind.io.camera.newIntentToCamera
 import com.skullmind.io.databinding.ActivityMainBinding
 import com.skullmind.io.github.newIntentToGitHub
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity(){
     lateinit var model: MainModel
 
     @Inject
-    lateinit var cameraModel:CameraModel
+    lateinit var cameraModel: CameraModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

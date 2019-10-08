@@ -1,4 +1,4 @@
-package com.skullmind.io.camera
+package com.skullmind.io.main
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable

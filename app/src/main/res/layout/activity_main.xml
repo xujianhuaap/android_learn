@@ -6,7 +6,7 @@
                 type="com.skullmind.io.main.MainModel"/>
         <variable
                 name="camera_model"
-                type="com.skullmind.io.camera.CameraModel"/>
+                type="com.skullmind.io.main.CameraModel"/>
         <variable
                 name="vm"
                 type="com.skullmind.io.main.MainVM"/>
