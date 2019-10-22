@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_10_dp"
             android:padding="@dimen/dimen_10_dp"
-            android:textSize="@dimen/font_20_sp"
+            android:textSize="@dimen/font_18_sp"
             android:text="拍 照"
     />
 </LinearLayout>
