@@ -55,7 +55,7 @@ class CameraActivity :AppCompatActivity(){
     fun onClick(view: View) {
         Toast.makeText(this,"sss",Toast.LENGTH_LONG).show()
         if(checkCameraPermission()){
-            cameraManager.openCamera("0",stateCallBack,handler)
+            cameraManager.openCamera("0",deviceStateCallBack,handler)
         } else{
             requestPermissions(arrayOf<String>(Manifest.permission.CAMERA),REQUEST_CODE_CAMERA)
         }
@@ -143,8 +143,9 @@ class CameraActivity :AppCompatActivity(){
         }
 
         override fun onConfigured(session: CameraCaptureSession) {
-            Log.e("Camera","--state-->onSurfacePrepared")
-            session.capture(request,cameraSessionCaptureCallBack,handler)
+            Log.e("Camera","--state-->onConfigured")
+            session.prepare(cameraDevice.holder.surface)
+            session.setRepeatingRequest(request,cameraSessionCaptureCallBack,handler)
         }
 
         override fun onActive(session: CameraCaptureSession) {
@@ -154,7 +155,7 @@ class CameraActivity :AppCompatActivity(){
         }
     }
 
-    var stateCallBack: StateCallback = object :StateCallback(){
+    private val deviceStateCallBack: StateCallback = object :StateCallback(){
         override fun onOpened(camera: CameraDevice) {
             Log.e("Camera","--device state -->onOpened")
             assert(cameraDevice.holder.surface.isValid)
@@ -225,7 +226,7 @@ class CameraActivity :AppCompatActivity(){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(REQUEST_CODE_CAMERA == requestCode){
             val manager: CameraManager = cameraManager
-            if(checkCameraPermission()) manager.openCamera("0",stateCallBack,handler)
+            if(checkCameraPermission()) manager.openCamera("0",deviceStateCallBack,handler)
         }
     }
 
