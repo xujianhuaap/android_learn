@@ -63,6 +63,11 @@ dependencies {
 
 
     testImplementation libraries.junit
+    testImplementation libraries.mock_core
+    testImplementation libraries.power_mock_junit
+    testImplementation libraries.power_mock_junit_rule
+    testImplementation libraries.power_mock_api
+    testImplementation libraries.power_mock_classloading
     testImplementation libraries.robolectric
     testImplementation libraries.test_core
     androidTestImplementation libraries.android_test_runner

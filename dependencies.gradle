@@ -50,6 +50,11 @@ ext{
             //ForTest
             junit                  :"junit:junit:${versions.junit}",
              robolectric            :"org.robolectric:robolectric:${versions.robolectric}",
+            mock_core               :"org.mockito:mockito-core:2.8.9",
+            power_mock_junit        :"org.powermock:powermock-module-junit4:1.7.3",
+            power_mock_junit_rule   :"org.powermock:powermock-module-junit4-rule:1.7.3",
+            power_mock_api          :"org.powermock:powermock-api-mockito2:1.7.3",
+            power_mock_classloading :"org.powermock:powermock-classloading-xstream:1.7.3",
             test_core               :"androidx.test:core:1.0.0-beta02",
             android_test_runner    :"com.android.support.test:runner:${versions.android_test_runner}",
             espresso_core:         "com.android.support.test.espresso:espresso-core:${versions.android_test_espresso}"

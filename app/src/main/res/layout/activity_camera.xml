@@ -7,4 +7,18 @@
             android:id="@+id/tv_camera_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+    <SurfaceView
+            android:id="@+id/sv_camera_device"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"/>
+    <TextView
+            android:id="@+id/tv_take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10_dp"
+            android:padding="@dimen/dimen_10_dp"
+            android:textSize="@dimen/font_20_sp"
+            android:text="拍 照"
+    />
 </LinearLayout>
