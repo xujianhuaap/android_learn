@@ -7,6 +7,7 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Bundle
 import android.view.SurfaceView
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -47,9 +48,13 @@ class CameraActivity : AppCompatActivity() {
         view.text = it
     }
 
-    @OnClick(R.id.tv_take_photo)
-    fun onClick() {
-        openCamera()
+    @OnClick(value = [R.id.tv_photo_take,R.id.tv_photo_preview])
+    fun onClick(view: View) {
+        if(view.id == R.id.tv_photo_preview){
+            openCamera()
+        }else if(view.id == R.id.tv_photo_take){
+            camera.takePhoto()
+        }
     }
 
     private fun requestCameraPermission() {

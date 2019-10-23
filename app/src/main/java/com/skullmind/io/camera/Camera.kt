@@ -17,6 +17,7 @@ class Camera(private val mContext:Context){
     val mHandler:Handler = Handler(mContext.mainLooper)
 
     lateinit var mRequest:CaptureRequest
+     var isTakephoto:Boolean = false
 
     var mSurface:Surface ?= null
     var cameraSessionCaptureCallBack: CameraCaptureSession.CaptureCallback
@@ -32,6 +33,10 @@ class Camera(private val mContext:Context){
             result: TotalCaptureResult
         ) {
             super.onCaptureCompleted(session, request, result)
+            if(isTakephoto){
+                session.stopRepeating()
+                Log.e("Camera","---->stopRepeat")
+            }
             Log.e("Camera","---->onCaptureCompleted")
         }
 
@@ -79,6 +84,10 @@ class Camera(private val mContext:Context){
         override fun onReady(session: CameraCaptureSession) {
             super.onReady(session)
             Log.e("Camera","--state-->onReady")
+            if(isTakephoto){
+                session.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
+                isTakephoto = false
+            }
         }
 
         override fun onCaptureQueueEmpty(session: CameraCaptureSession) {
@@ -103,7 +112,12 @@ class Camera(private val mContext:Context){
         override fun onConfigured(session: CameraCaptureSession) {
             Log.e("Camera","--state-->onConfigured")
 //            session.prepare(cameraDevice.holder.surface)
-            session.setRepeatingRequest(mRequest,cameraSessionCaptureCallBack,mHandler)
+            if(isTakephoto){
+                session.stopRepeating()
+                session.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
+            }else{
+                session.setRepeatingRequest(mRequest,cameraSessionCaptureCallBack,mHandler)
+            }
         }
 
         override fun onActive(session: CameraCaptureSession) {
@@ -157,6 +171,9 @@ class Camera(private val mContext:Context){
         }
     }
 
+    fun takePhoto(){
+        isTakephoto = true
+    }
     private fun getCameraManger():CameraManager
             = mContext.getSystemService(CAMERA_SERVICE) as CameraManager
 
