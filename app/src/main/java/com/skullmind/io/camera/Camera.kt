@@ -216,6 +216,10 @@ class Camera(private val mContext:Context){
         mContext.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
 
 
+    fun releaseCamera(){
+        mSession?.close()
+        cameraDevice?.close()
+    }
 }
 
 class SurfaceHolderCallBack: SurfaceHolder.Callback{

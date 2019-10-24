@@ -80,6 +80,11 @@ class CameraActivity : AppCompatActivity() {
         openCamera()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        camera.releaseCamera()
+    }
+
     private fun initViewModel(name: String?) {
         model.name.observe(this, observer)
         model.name.value = name
