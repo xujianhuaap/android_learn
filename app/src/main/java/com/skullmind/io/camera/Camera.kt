@@ -16,14 +16,13 @@ class Camera(private val mContext:Context){
     private val mCameraManager = getCameraManger()
     val mHandler:Handler = Handler(mContext.mainLooper)
 
+    var mSurface:Surface ?= null
     lateinit var mRequest:CaptureRequest
     var mSession:CameraCaptureSession? = null
     var cameraDevice:CameraDevice? = null
+
     private var isTakePhoto:Boolean = false
     private var isPreview:Boolean = true
-    private var deviceEnable:Boolean = false
-
-    var mSurface:Surface ?= null
     var cameraSessionCaptureCallBack: CameraCaptureSession.CaptureCallback
             = object: CameraCaptureSession.CaptureCallback(){
         override fun onCaptureSequenceAborted(session: CameraCaptureSession, sequenceId: Int) {
@@ -41,6 +40,7 @@ class Camera(private val mContext:Context){
                 session.stopRepeating()
                 Log.e("Camera","---->stopRepeat")
             }
+
             Log.e("Camera","---->onCaptureCompleted")
         }
 
@@ -139,7 +139,6 @@ class Camera(private val mContext:Context){
     private val deviceStateCallBack: CameraDevice.StateCallback = object : CameraDevice.StateCallback(){
         override fun onOpened(camera: CameraDevice) {
             Log.e("Camera","--device state -->onOpened")
-            deviceEnable = true
             cameraDevice = camera
             assert(mSurface?.isValid?:false)
             createCaptureSession(camera)
@@ -149,18 +148,15 @@ class Camera(private val mContext:Context){
         override fun onClosed(camera: CameraDevice) {
             super.onClosed(camera)
             Log.e("Camera","--device state -->onClosed")
-            deviceEnable = false
             cameraDevice = null
         }
 
         override fun onDisconnected(camera: CameraDevice) {
             Log.e("Camera","--device state -->onDisconnected")
-            deviceEnable = false
             cameraDevice = null
         }
 
         override fun onError(camera: CameraDevice, error: Int) {
-            deviceEnable = false
             cameraDevice = null
             Log.e("Camera","--device state -->onError")
         }
@@ -189,7 +185,7 @@ class Camera(private val mContext:Context){
 
     @SuppressLint("MissingPermission")
     fun openCamera(cameraId: String, checkPermission:()-> Boolean,requestPermission:()->Unit){
-        if(deviceEnable) return
+        if(cameraEnable()) return
         if(!checkCameraValid(cameraId)) throw RuntimeException(" valid camera")
         if(checkPermission()){
             mCameraManager.openCamera(cameraId,deviceStateCallBack,mHandler)
@@ -211,6 +207,8 @@ class Camera(private val mContext:Context){
     fun takePhoto(){
         isTakePhoto = true
     }
+
+    private fun cameraEnable():Boolean = cameraDevice != null
     private fun getCameraManger():CameraManager
             = mContext.getSystemService(CAMERA_SERVICE) as CameraManager
 
