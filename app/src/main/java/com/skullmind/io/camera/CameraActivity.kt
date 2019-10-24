@@ -51,7 +51,7 @@ class CameraActivity : AppCompatActivity() {
     @OnClick(value = [R.id.tv_photo_take,R.id.tv_photo_preview])
     fun onClick(view: View) {
         if(view.id == R.id.tv_photo_preview){
-            openCamera()
+            camera.previewPhoto()
         }else if(view.id == R.id.tv_photo_take){
             camera.takePhoto()
         }
@@ -76,6 +76,8 @@ class CameraActivity : AppCompatActivity() {
         initSurfaceHolder()
 
         initViewModel(name)
+
+        openCamera()
     }
 
     private fun initViewModel(name: String?) {

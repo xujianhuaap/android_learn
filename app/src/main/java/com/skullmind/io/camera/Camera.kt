@@ -17,7 +17,11 @@ class Camera(private val mContext:Context){
     val mHandler:Handler = Handler(mContext.mainLooper)
 
     lateinit var mRequest:CaptureRequest
-     var isTakephoto:Boolean = false
+    var mSession:CameraCaptureSession? = null
+    var cameraDevice:CameraDevice? = null
+    private var isTakePhoto:Boolean = false
+    private var isPreview:Boolean = true
+    private var deviceEnable:Boolean = false
 
     var mSurface:Surface ?= null
     var cameraSessionCaptureCallBack: CameraCaptureSession.CaptureCallback
@@ -33,7 +37,7 @@ class Camera(private val mContext:Context){
             result: TotalCaptureResult
         ) {
             super.onCaptureCompleted(session, request, result)
-            if(isTakephoto){
+            if(isTakePhoto){
                 session.stopRepeating()
                 Log.e("Camera","---->stopRepeat")
             }
@@ -84,9 +88,12 @@ class Camera(private val mContext:Context){
         override fun onReady(session: CameraCaptureSession) {
             super.onReady(session)
             Log.e("Camera","--state-->onReady")
-            if(isTakephoto){
+            if(isTakePhoto){
+                isTakePhoto = false
+                isPreview = false
                 session.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
-                isTakephoto = false
+            }else if(isPreview){
+                session.setRepeatingRequest(mRequest,cameraSessionCaptureCallBack,mHandler)
             }
         }
 
@@ -96,12 +103,13 @@ class Camera(private val mContext:Context){
         }
 
         override fun onConfigureFailed(session: CameraCaptureSession) {
-
+            mSession = null
         }
 
         override fun onClosed(session: CameraCaptureSession) {
             super.onClosed(session)
             Log.e("Camera","--state-->onClosed")
+            mSession = null
         }
 
         override fun onSurfacePrepared(session: CameraCaptureSession, surface: Surface) {
@@ -112,10 +120,11 @@ class Camera(private val mContext:Context){
         override fun onConfigured(session: CameraCaptureSession) {
             Log.e("Camera","--state-->onConfigured")
 //            session.prepare(cameraDevice.holder.surface)
-            if(isTakephoto){
+            mSession = session
+            if(isTakePhoto){
                 session.stopRepeating()
                 session.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
-            }else{
+            }else if(isPreview){
                 session.setRepeatingRequest(mRequest,cameraSessionCaptureCallBack,mHandler)
             }
         }
@@ -130,27 +139,44 @@ class Camera(private val mContext:Context){
     private val deviceStateCallBack: CameraDevice.StateCallback = object : CameraDevice.StateCallback(){
         override fun onOpened(camera: CameraDevice) {
             Log.e("Camera","--device state -->onOpened")
+            deviceEnable = true
+            cameraDevice = camera
             assert(mSurface?.isValid?:false)
-            val outputs = listOf<Surface>(mSurface!!)
-            camera.createCaptureSession(outputs,cameraSessionStateCallback,mHandler)
-            val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-            builder.addTarget(mSurface)
-            mRequest = builder.build()
+            createCaptureSession(camera)
+            buildRequest(camera)
         }
 
         override fun onClosed(camera: CameraDevice) {
             super.onClosed(camera)
             Log.e("Camera","--device state -->onClosed")
+            deviceEnable = false
+            cameraDevice = null
         }
 
         override fun onDisconnected(camera: CameraDevice) {
             Log.e("Camera","--device state -->onDisconnected")
+            deviceEnable = false
+            cameraDevice = null
         }
 
         override fun onError(camera: CameraDevice, error: Int) {
+            deviceEnable = false
+            cameraDevice = null
             Log.e("Camera","--device state -->onError")
         }
     }
+
+    private fun createCaptureSession(camera: CameraDevice) {
+        val outputs = listOf(mSurface!!)
+        camera.createCaptureSession(outputs, cameraSessionStateCallback, mHandler)
+    }
+
+    private fun buildRequest(camera: CameraDevice) {
+        val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+        builder.addTarget(mSurface)
+        mRequest = builder.build()
+    }
+
     private fun checkCameraValid(cameraId:String):Boolean{
         if(TextUtils.isEmpty(cameraId)){ return false}
         for(item in mCameraManager.cameraIdList){
@@ -163,6 +189,7 @@ class Camera(private val mContext:Context){
 
     @SuppressLint("MissingPermission")
     fun openCamera(cameraId: String, checkPermission:()-> Boolean,requestPermission:()->Unit){
+        if(deviceEnable) return
         if(!checkCameraValid(cameraId)) throw RuntimeException(" valid camera")
         if(checkPermission()){
             mCameraManager.openCamera(cameraId,deviceStateCallBack,mHandler)
@@ -171,8 +198,18 @@ class Camera(private val mContext:Context){
         }
     }
 
+    fun previewPhoto(){
+        isPreview = true
+        assert(cameraDevice != null)
+        if(mSession ==null) {
+            createCaptureSession(cameraDevice!!)
+        }else{
+            mSession?.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
+        }
+    }
+
     fun takePhoto(){
-        isTakephoto = true
+        isTakePhoto = true
     }
     private fun getCameraManger():CameraManager
             = mContext.getSystemService(CAMERA_SERVICE) as CameraManager
