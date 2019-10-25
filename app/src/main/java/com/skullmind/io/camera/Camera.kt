@@ -293,6 +293,10 @@ class Camera(private val mContext:Context){
         }
 
     }
+
+    /***
+     * 是否交换高度与宽度
+     */
     private fun areDimensionsSwapped(displayRotation: Int,sensorOrientation:Int): Boolean {
         var swappedDimensions = false
         when (displayRotation) {
@@ -384,7 +388,10 @@ class Camera(private val mContext:Context){
          */
         private val MAX_PREVIEW_HEIGHT = 1080
 
-
+        /***
+         * @param choices 是根据Camera Manager 提供的对应CameraId 的CameraCharacteristics.从CameraCharacteristics中,
+         * 提取可用的TextureViewSurface 的Size(包含width 和 height 信息)的Collections.
+         */
         @JvmStatic private fun chooseOptimalSize(
             choices: Array<Size>,
             textureViewWidth: Int,
