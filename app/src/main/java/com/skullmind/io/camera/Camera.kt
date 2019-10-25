@@ -4,20 +4,36 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.CAMERA_SERVICE
 import android.content.pm.PackageManager
+import android.graphics.ImageFormat
+import android.hardware.SensorManager.getOrientation
 import android.hardware.camera2.*
+import android.hardware.camera2.params.OutputConfiguration
+import android.media.ImageReader
 import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
 import java.lang.RuntimeException
+import android.hardware.camera2.CaptureRequest
+import androidx.core.view.ViewCompat.getRotation
+import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.params.StreamConfigurationMap
+import android.util.Size
+
 
 class Camera(private val mContext:Context){
     private val mCameraManager = getCameraManger()
-    val mHandler:Handler = Handler(mContext.mainLooper)
+    var mHandler:Handler? = null
 
     var mSurface:Surface ?= null
-    lateinit var mRequest:CaptureRequest
+    var imageDimension: Size? = null
+    private val imageReader: ImageReader
+        get() = ImageReader.newInstance(750, 750, ImageFormat.JPEG, 2)
+
+    lateinit var mPreviewRequest:CaptureRequest
+    lateinit var mCaptureRequest:CaptureRequest
     var mSession:CameraCaptureSession? = null
     var cameraDevice:CameraDevice? = null
 
@@ -37,10 +53,8 @@ class Camera(private val mContext:Context){
         ) {
             super.onCaptureCompleted(session, request, result)
             if(isTakePhoto){
-                session.stopRepeating()
                 Log.e("Camera","---->stopRepeat")
             }
-
             Log.e("Camera","---->onCaptureCompleted")
         }
 
@@ -91,9 +105,11 @@ class Camera(private val mContext:Context){
             if(isTakePhoto){
                 isTakePhoto = false
                 isPreview = false
-                session.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
+                session.stopRepeating()
+                session.abortCaptures()
+                session.capture(mCaptureRequest,cameraSessionCaptureCallBack,mHandler)
             }else if(isPreview){
-                session.setRepeatingRequest(mRequest,cameraSessionCaptureCallBack,mHandler)
+                session.setRepeatingRequest(mPreviewRequest,cameraSessionCaptureCallBack,mHandler)
             }
         }
 
@@ -123,9 +139,9 @@ class Camera(private val mContext:Context){
             mSession = session
             if(isTakePhoto){
                 session.stopRepeating()
-                session.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
+                session.capture(mCaptureRequest,cameraSessionCaptureCallBack,mHandler)
             }else if(isPreview){
-                session.setRepeatingRequest(mRequest,cameraSessionCaptureCallBack,mHandler)
+                session.setRepeatingRequest(mPreviewRequest,cameraSessionCaptureCallBack,mHandler)
             }
         }
 
@@ -142,7 +158,8 @@ class Camera(private val mContext:Context){
             cameraDevice = camera
             assert(mSurface?.isValid?:false)
             createCaptureSession(camera)
-            buildRequest(camera)
+            buildPreviewRequest(camera)
+            buildCaptureRequest(camera)
         }
 
         override fun onClosed(camera: CameraDevice) {
@@ -163,14 +180,22 @@ class Camera(private val mContext:Context){
     }
 
     private fun createCaptureSession(camera: CameraDevice) {
-        val outputs = listOf(mSurface!!)
+        val outputs = listOf(mSurface!!,imageReader.surface)
         camera.createCaptureSession(outputs, cameraSessionStateCallback, mHandler)
     }
 
-    private fun buildRequest(camera: CameraDevice) {
+    private fun buildPreviewRequest(camera: CameraDevice) {
         val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
         builder.addTarget(mSurface)
-        mRequest = builder.build()
+        mPreviewRequest = builder.build()
+    }
+    private fun buildCaptureRequest(camera: CameraDevice) {
+        val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+        builder.addTarget(imageReader.surface)
+        builder.set(CaptureRequest.CONTROL_AF_MODE,
+            CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+        builder.set(CaptureRequest.JPEG_ORIENTATION, 0)
+        mCaptureRequest = builder.build()
     }
 
     private fun checkCameraValid(cameraId:String):Boolean{
@@ -183,15 +208,25 @@ class Camera(private val mContext:Context){
         return false
     }
 
+
+
     @SuppressLint("MissingPermission")
     fun openCamera(cameraId: String, checkPermission:()-> Boolean,requestPermission:()->Unit){
         if(cameraEnable()) return
         if(!checkCameraValid(cameraId)) throw RuntimeException(" valid camera")
         if(checkPermission()){
+            imageReader.setOnImageAvailableListener(ImageListener(),mHandler)
+            updateCameraConfig(cameraId)
             mCameraManager.openCamera(cameraId,deviceStateCallBack,mHandler)
         }else{
             requestPermission()
         }
+    }
+
+    fun updateCameraConfig(cameraId: String) {
+        val characteristics = mCameraManager.getCameraCharacteristics(cameraId)
+        val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
+        imageDimension = map!!.getOutputSizes(SurfaceTexture::class.java)[0]
     }
 
     fun previewPhoto(){
@@ -200,7 +235,7 @@ class Camera(private val mContext:Context){
         if(mSession ==null) {
             createCaptureSession(cameraDevice!!)
         }else{
-            mSession?.capture(mRequest,cameraSessionCaptureCallBack,mHandler)
+            mSession?.capture(mPreviewRequest,cameraSessionCaptureCallBack,mHandler)
         }
     }
 
@@ -217,24 +252,19 @@ class Camera(private val mContext:Context){
 
 
     fun releaseCamera(){
+        imageReader?.close()
+        mSession?.stopRepeating()
         mSession?.close()
         cameraDevice?.close()
     }
 }
 
-class SurfaceHolderCallBack: SurfaceHolder.Callback{
-    var camera:Camera? = null
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        Log.e("Camera","--surface-->surfaceChanged")
-    }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        Log.e("Camera","--surface-->surfaceDestroyed")
-        camera?.mSurface = null
-    }
 
-    override fun surfaceCreated(holder: SurfaceHolder?) {
-        Log.e("Camera","--surface-->surfaceCreated")
-        camera?.mSurface = holder?.surface
+class ImageListener:ImageReader.OnImageAvailableListener{
+    override fun onImageAvailable(reader: ImageReader?) {
+        var image = reader?.acquireLatestImage()
+        Log.d("Camera","--save image-->"+image?.format)
+        image?.format
     }
 }

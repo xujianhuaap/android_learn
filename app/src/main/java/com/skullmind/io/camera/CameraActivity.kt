@@ -3,11 +3,14 @@ package com.skullmind.io.camera
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.graphics.PixelFormat
+import android.graphics.*
+import android.media.ImageReader
 import android.os.Build
 import android.os.Bundle
-import android.view.SurfaceView
-import android.view.View
+import android.os.Handler
+import android.os.HandlerThread
+import android.util.Log
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -36,13 +39,18 @@ class CameraActivity : AppCompatActivity() {
     lateinit var view: TextView
 
     @BindView(R.id.sv_camera_device)
-    lateinit var cameraDevice: SurfaceView
+    lateinit var cameraDevice: TextureView
+
+    @Inject
+    lateinit var  surfaceCallback: SurfaceHolderCallBack
 
     @Inject
     lateinit var model: CameraViewModel
 
     @Inject
     lateinit var camera: Camera
+
+    var backgroundThread:HandlerThread? = null
 
     private var observer: Observer<String> = Observer {
         view.text = it
@@ -64,7 +72,7 @@ class CameraActivity : AppCompatActivity() {
         )
     }
 
-    private val surfaceCallback: SurfaceHolderCallBack = SurfaceHolderCallBack()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,12 +85,18 @@ class CameraActivity : AppCompatActivity() {
 
         initViewModel(name)
 
-        openCamera()
+        camera.updateCameraConfig("0")
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onResume() {
+        super.onResume()
+        startBackgroundThread()
+    }
+
+    override fun onPause() {
+        super.onPause()
         camera.releaseCamera()
+        stopBackgroundThread()
     }
 
     private fun initViewModel(name: String?) {
@@ -95,10 +109,8 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun initSurfaceHolder() {
-        cameraDevice.holder.setFixedSize(750, 750)
-        cameraDevice.holder.setFormat(PixelFormat.RGB_888)
-        surfaceCallback.camera = camera
-        cameraDevice.holder.addCallback(surfaceCallback)
+        cameraDevice.surfaceTextureListener =surfaceCallback
+        cameraDevice.surfaceTextureListener
     }
 
     private fun checkCameraPermission(): Boolean {
@@ -115,11 +127,79 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun openCamera() {
+    fun openCamera() {
         camera.openCamera("0", { checkCameraPermission() }, { requestCameraPermission() })
     }
 
 
+    private fun startBackgroundThread() {
+        backgroundThread = HandlerThread("CameraBackground").also { it.start() }
+        camera.mHandler =  Handler(backgroundThread?.looper)
+    }
+
+    /**
+     * Stops the background thread and its [Handler].
+     */
+    private fun stopBackgroundThread() {
+        backgroundThread?.quitSafely()
+        try {
+            backgroundThread?.join()
+            backgroundThread = null
+            camera?.mHandler = null
+        } catch (e: InterruptedException) {
+            Log.e("Camera", e.toString())
+        }
+
+    }
+
+
+}
+class SurfaceHolderCallBack(val activity: CameraActivity,val camera:Camera):TextureView.SurfaceTextureListener{
+    override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
+        Log.d("Camera","--Surface state--> onSurfaceTextureSizeChanged")
+        configureTransform(width,height)
+    }
+
+    override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+        Log.d("Camera","--Surface state--> onSurfaceTextureUpdated")
+    }
+
+    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean = true
+
+    override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
+        Log.d("Camera","--Surface state--> onSurfaceTextureAvailable")
+        surface?.also {
+            surface.setDefaultBufferSize(activity.cameraDevice.width,activity.cameraDevice.height)
+            val previewSurface = Surface(surface)
+            camera.mSurface = previewSurface
+            configureTransform(width,height)
+            activity.openCamera()
+        }
+    }
+
+    private fun configureTransform(viewWidth: Int, viewHeight: Int) {
+        val rotation = activity.windowManager.defaultDisplay.rotation
+        val matrix = Matrix()
+        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
+        val bufferRect = RectF(0f, 0f,
+            camera?.imageDimension?.width?.toFloat()!!,
+            camera?.imageDimension?.height?.toFloat()!!)
+        val centerX = viewRect.centerX()
+        val centerY = viewRect.centerY()
+        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
+            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
+            val scale = Math.max(
+                viewHeight.toFloat() / camera?.imageDimension?.height?.toFloat()!!,
+                viewWidth.toFloat() / camera?.imageDimension?.width?.toFloat()!!
+            )
+            matrix.postScale(scale, scale, centerX, centerY)
+            matrix.postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
+        } else if (Surface.ROTATION_180 == rotation) {
+            matrix.postRotate(180f, centerX, centerY)
+        }
+        activity.cameraDevice.setTransform(matrix)
+    }
 }
 
 

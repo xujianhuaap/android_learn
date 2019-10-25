@@ -6,6 +6,7 @@ import chat.rocket.android.dagger.scope.PerActivity;
 import com.skullmind.io.camera.Camera;
 import com.skullmind.io.camera.CameraActivity
 import com.skullmind.io.camera.CameraViewModel
+import com.skullmind.io.camera.SurfaceHolderCallBack
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,4 +19,8 @@ class CameraModule {
     @PerActivity
     @Provides
     fun provideModel(activity:CameraActivity)=  ViewModelProviders.of(activity).get(CameraViewModel::class.java)
+
+    @PerActivity
+    @Provides
+    fun provideSurfaceHolderCallBack (activity: CameraActivity,camera:Camera) = SurfaceHolderCallBack(activity,camera)
 }
