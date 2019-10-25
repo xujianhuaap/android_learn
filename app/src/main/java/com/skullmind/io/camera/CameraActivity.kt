@@ -39,7 +39,7 @@ class CameraActivity : AppCompatActivity() {
     lateinit var view: TextView
 
     @BindView(R.id.sv_camera_device)
-    lateinit var cameraDevice: TextureView
+    lateinit var cameraDevice: AutoFitTextureView
 
     @Inject
     lateinit var  surfaceCallback: SurfaceHolderCallBack
@@ -157,7 +157,7 @@ class CameraActivity : AppCompatActivity() {
 class SurfaceHolderCallBack(val activity: CameraActivity,val camera:Camera):TextureView.SurfaceTextureListener{
     override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
         Log.d("Camera","--Surface state--> onSurfaceTextureSizeChanged")
-        configureTransform(width,height)
+        camera.configureTransform(width,height,activity)
     }
 
     override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
@@ -172,34 +172,13 @@ class SurfaceHolderCallBack(val activity: CameraActivity,val camera:Camera):Text
             surface.setDefaultBufferSize(activity.cameraDevice.width,activity.cameraDevice.height)
             val previewSurface = Surface(surface)
             camera.mSurface = previewSurface
-            configureTransform(width,height)
+            camera.setUpCameraOutputs(width,height,activity)
+            camera.configureTransform(width,height,activity)
             activity.openCamera()
         }
     }
 
-    private fun configureTransform(viewWidth: Int, viewHeight: Int) {
-        val rotation = activity.windowManager.defaultDisplay.rotation
-        val matrix = Matrix()
-        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
-        val bufferRect = RectF(0f, 0f,
-            camera?.imageDimension?.width?.toFloat()!!,
-            camera?.imageDimension?.height?.toFloat()!!)
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
-            val scale = Math.max(
-                viewHeight.toFloat() / camera?.imageDimension?.height?.toFloat()!!,
-                viewWidth.toFloat() / camera?.imageDimension?.width?.toFloat()!!
-            )
-            matrix.postScale(scale, scale, centerX, centerY)
-            matrix.postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
-        } else if (Surface.ROTATION_180 == rotation) {
-            matrix.postRotate(180f, centerX, centerY)
-        }
-        activity.cameraDevice.setTransform(matrix)
-    }
+
 }
 
 
