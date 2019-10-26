@@ -5,10 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.*
 import android.media.ImageReader
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
+import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -91,10 +88,17 @@ class CameraActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         startBackgroundThread()
+        if(cameraDevice.isAvailable){
+            if(!camera.cameraEnable()){
+//                openCamera()
+            }
+        }else{
+
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         camera.releaseCamera()
         stopBackgroundThread()
     }
@@ -128,13 +132,13 @@ class CameraActivity : AppCompatActivity() {
     }
 
     fun openCamera() {
-        camera.openCamera("0", { checkCameraPermission() }, { requestCameraPermission() })
+        camera.openCamera({ checkCameraPermission() }, { requestCameraPermission() })
     }
 
 
     private fun startBackgroundThread() {
         backgroundThread = HandlerThread("CameraBackground").also { it.start() }
-        camera.mHandler =  Handler(backgroundThread?.looper)
+        camera.getHandler(backgroundThread?.looper!!)
     }
 
     /**
@@ -145,6 +149,7 @@ class CameraActivity : AppCompatActivity() {
         try {
             backgroundThread?.join()
             backgroundThread = null
+            camera.mHandler?.removeCallbacksAndMessages(null)
             camera?.mHandler = null
         } catch (e: InterruptedException) {
             Log.e("Camera", e.toString())
@@ -174,7 +179,9 @@ class SurfaceHolderCallBack(val activity: CameraActivity,val camera:Camera):Text
             camera.mSurface = previewSurface
             camera.setUpCameraOutputs(width,height,activity)
             camera.configureTransform(width,height,activity)
-            activity.openCamera()
+            if(!camera.cameraEnable()){
+                activity.openCamera()
+            }
         }
     }
 
