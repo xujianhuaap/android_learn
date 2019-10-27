@@ -411,9 +411,9 @@ class Camera(private val mContext: Context) {
         imageReader?.close()
         mSession?.stopRepeating()
         mSession?.close()
-        cameraOpenCloseLock.acquire()
         cameraDevice?.close()
-        cameraOpenCloseLock.release()
+        mSurface?.release()
+
     }
 
     private fun initHandler(looper:Looper)= object:Handler(looper){
