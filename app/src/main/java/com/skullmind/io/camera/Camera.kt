@@ -282,7 +282,7 @@ class Camera(private val mContext: Context) {
                 val displayRotation = activity.windowManager.defaultDisplay.rotation
                 //[0,90,180,270]
                 val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
-                val swappedDimensions = areDimensionsSwapped(displayRotation, sensorOrientation)
+                val swappedDimensions = Config.areDimensionsSwapped(displayRotation, sensorOrientation)
 
                 val displaySize = Point()
                 activity.windowManager.defaultDisplay.getSize(displaySize)
@@ -330,30 +330,6 @@ class Camera(private val mContext: Context) {
         }
 
     }
-
-    /***
-     * 是否交换高度与宽度
-     */
-    private fun areDimensionsSwapped(displayRotation: Int, sensorOrientation: Int): Boolean {
-        var swappedDimensions = false
-        when (displayRotation) {
-            Surface.ROTATION_0, Surface.ROTATION_180 -> {
-                if (sensorOrientation == 90 || sensorOrientation == 270) {
-                    swappedDimensions = true
-                }
-            }
-            Surface.ROTATION_90, Surface.ROTATION_270 -> {
-                if (sensorOrientation == 0 || sensorOrientation == 180) {
-                    swappedDimensions = true
-                }
-            }
-            else -> {
-                Log.e("Camera", "Display rotation is invalid: $displayRotation")
-            }
-        }
-        return swappedDimensions
-    }
-
 
     fun configureTransform(viewWidth: Int, viewHeight: Int, activity: CameraActivity) {
         val rotation = activity.windowManager.defaultDisplay.rotation
@@ -445,16 +421,16 @@ class Camera(private val mContext: Context) {
     }
 
     companion object {
-        val MESSAGE_SAVE_IMAGE= 1
+        const val MESSAGE_SAVE_IMAGE = 1
         /**
          * Max preview width that is guaranteed by Camera2 API
          */
-        private val MAX_PREVIEW_WIDTH = 1920
+        private const  val MAX_PREVIEW_WIDTH = 1920
 
         /**
          * Max preview height that is guaranteed by Camera2 API
          */
-        private val MAX_PREVIEW_HEIGHT = 1080
+        private const val MAX_PREVIEW_HEIGHT = 1080
 
 
 
