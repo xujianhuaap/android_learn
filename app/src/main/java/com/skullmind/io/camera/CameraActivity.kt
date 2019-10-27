@@ -56,14 +56,19 @@ class CameraActivity : AppCompatActivity() {
     @OnClick(value = [R.id.tv_photo_take,R.id.tv_photo_preview])
     fun onClick(view: View) {
         if(view.id == R.id.tv_photo_preview){
-            camera.previewPhoto()
+            if(camera.cameraEnable()){
+                camera.previewPhoto()
+            }else{
+                openCamera()
+            }
+
         }else if(view.id == R.id.tv_photo_take){
             camera.takePhoto()
         }
     }
 
     private fun requestCameraPermission() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) requestPermissions(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) requestPermissions(
             arrayOf(Manifest.permission.CAMERA),
             REQUEST_CODE_CAMERA
         )
@@ -90,7 +95,7 @@ class CameraActivity : AppCompatActivity() {
         startBackgroundThread()
         if(cameraDevice.isAvailable){
             if(!camera.cameraEnable()){
-//                openCamera()
+                openCamera()
             }
         }else{
 
@@ -124,15 +129,9 @@ class CameraActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (REQUEST_CODE_CAMERA == requestCode && grantResults[0] == PERMISSION_GRANTED) {
-            openCamera()
-        }
-    }
 
     fun openCamera() {
-        camera.openCamera({ checkCameraPermission() }, { requestCameraPermission() })
+        camera.openCamera{ checkCameraPermission() }
     }
 
 

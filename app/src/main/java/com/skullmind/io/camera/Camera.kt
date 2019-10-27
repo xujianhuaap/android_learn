@@ -16,9 +16,12 @@ import android.util.Log
 import android.util.Size
 import android.view.Surface
 import java.util.*
+import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
 
 
 class Camera(private val mContext: Context) {
+    val cameraOpenCloseLock = Semaphore(1)
     private val mCameraManager = getCameraManger()
     var mHandler: Handler? = null
 
@@ -162,9 +165,11 @@ class Camera(private val mContext: Context) {
             Log.e("Camera", "--device state -->onOpened")
             cameraDevice = camera
             assert(mSurface?.isValid ?: false)
+            cameraOpenCloseLock.release()
             createCaptureSession(camera)
             buildPreviewRequest(camera)
             buildCaptureRequest(camera)
+
         }
 
         override fun onClosed(camera: CameraDevice) {
@@ -175,6 +180,7 @@ class Camera(private val mContext: Context) {
 
         override fun onDisconnected(camera: CameraDevice) {
             Log.e("Camera", "--device state -->onDisconnected")
+            cameraOpenCloseLock.release()
             cameraDevice = null
         }
 
@@ -220,17 +226,16 @@ class Camera(private val mContext: Context) {
 
 
     @SuppressLint("MissingPermission")
-    fun openCamera(checkPermission: () -> Boolean, requestPermission: () -> Unit) {
-        if (cameraEnable()) return
+    fun openCamera(checkPermission: () -> Boolean) {
+        if (cameraEnable() || !checkPermission()) return
+
         if (!checkCameraValid(mCameraId)) throw RuntimeException(" valid camera")
-        if (checkPermission()) {
-            updateCameraConfig(mCameraId)
-            val msg = Message.obtain()
-            msg.what = MESSAGE_OPEN_CAMERA
-            mHandler?.sendMessage(msg)
-        } else {
-            requestPermission()
+
+        updateCameraConfig(mCameraId)
+        if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
+            throw RuntimeException("Time out waiting to lock camera opening.")
         }
+        mCameraManager.openCamera(mCameraId, deviceStateCallBack, mHandler)
     }
 
     fun setUpCameraOutputs(width: Int, height: Int, activity: CameraActivity) {
@@ -395,7 +400,9 @@ class Camera(private val mContext: Context) {
         imageReader?.close()
         mSession?.stopRepeating()
         mSession?.close()
+        cameraOpenCloseLock.acquire()
         cameraDevice?.close()
+        cameraOpenCloseLock.release()
     }
 
     private fun initHandler(looper:Looper)= object:Handler(looper){
@@ -403,12 +410,7 @@ class Camera(private val mContext: Context) {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
             when(msg?.what){
-                MESSAGE_OPEN_CAMERA ->{
-                    if(!cameraEnable()){
-                        mCameraManager.openCamera(mCameraId, deviceStateCallBack, mHandler)
-                        Log.d("Camera","--> thread"+Thread.currentThread().name)
-                    }
-                }
+
             }
         }
     }
@@ -428,6 +430,8 @@ class Camera(private val mContext: Context) {
          * Max preview height that is guaranteed by Camera2 API
          */
         private val MAX_PREVIEW_HEIGHT = 1080
+
+
 
         /***
          * @param choices 是根据Camera Manager 提供的对应CameraId 的CameraCharacteristics.从CameraCharacteristics中,
