@@ -2,6 +2,7 @@ package com.skullmind.io.camera
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.*
 import android.media.ImageReader
@@ -69,7 +70,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun requestCameraPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) requestPermissions(
-            arrayOf(Manifest.permission.CAMERA),
+            arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE),
             REQUEST_CODE_CAMERA
         )
     }
@@ -124,14 +125,18 @@ class CameraActivity : AppCompatActivity() {
 
     private fun checkCameraPermission(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return PERMISSION_GRANTED == checkSelfPermission(Manifest.permission.CAMERA)
+            for(item in PERMISSIONS){
+                if(PERMISSION_DENIED == checkSelfPermission(item)){
+                    return false
+                }
+            }
         }
         return true
     }
 
 
     fun openCamera() {
-        camera.openCamera{ checkCameraPermission() }
+        camera.openCamera( {checkCameraPermission()},{requestCameraPermission()})
     }
 
 
@@ -154,6 +159,10 @@ class CameraActivity : AppCompatActivity() {
             Log.e("Camera", e.toString())
         }
 
+    }
+
+    companion object{
+        val PERMISSIONS = listOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
 

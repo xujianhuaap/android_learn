@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.graphics.*
 import android.hardware.camera2.*
 import android.media.ImageReader
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -15,17 +16,24 @@ import android.text.TextUtils
 import android.util.Log
 import android.util.Size
 import android.view.Surface
+import okio.Okio
+import java.io.File
+import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
+import kotlin.math.sin
 
 
 class Camera(private val mContext: Context) {
     val cameraOpenCloseLock = Semaphore(1)
+    val saveImageLock = Semaphore(1)
     private val mCameraManager = getCameraManger()
     var mHandler: Handler? = null
 
     lateinit var mCameraId: String
+    var mCurrentImage:ByteBuffer? = null
     var mSurface: Surface? = null
     var previewSize: Size? = null
     var imageReader: ImageReader? = null
@@ -226,8 +234,12 @@ class Camera(private val mContext: Context) {
 
 
     @SuppressLint("MissingPermission")
-    fun openCamera(checkPermission: () -> Boolean) {
-        if (cameraEnable() || !checkPermission()) return
+    fun openCamera(checkPermission: () -> Boolean, requestPermission: () -> Unit) {
+        if( !checkPermission()){
+            requestPermission()
+            return
+        }
+        if (cameraEnable()) return
 
         if (!checkCameraValid(mCameraId)) throw RuntimeException(" valid camera")
 
@@ -263,9 +275,8 @@ class Camera(private val mContext: Context) {
                 imageReader = ImageReader.newInstance(
                     largest.width, largest.height,
                     ImageFormat.JPEG, /*maxImages*/ 2
-                ).apply {
-                    setOnImageAvailableListener(ImageListener(), mHandler)
-                }
+                )
+                imageReader?.setOnImageAvailableListener(ImageListener(this), mHandler)
 
                 // 0 屏幕未旋转,90 屏幕顺时针旋转90
                 val displayRotation = activity.windowManager.defaultDisplay.rotation
@@ -410,7 +421,21 @@ class Camera(private val mContext: Context) {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
             when(msg?.what){
-
+                MESSAGE_SAVE_IMAGE ->{
+                   val dir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                    val simpleDateFormat = SimpleDateFormat("yyyyMMddHHmmss")
+                    val imgName = simpleDateFormat.format(Date())+".jpg"
+                    val imgFile = File(dir,imgName)
+                    if(imgFile.exists()){
+                        imgFile.delete()
+                    }
+                    if(!imgFile.exists()) imgFile.createNewFile()
+                    val sink = Okio.sink(imgFile)
+                    val buffer = Okio.buffer(sink)
+                    buffer.write(mCurrentImage)
+                    buffer.close()
+                    saveImageLock.release()
+                }
             }
         }
     }
@@ -420,7 +445,7 @@ class Camera(private val mContext: Context) {
     }
 
     companion object {
-        private val MESSAGE_OPEN_CAMERA = 1
+        val MESSAGE_SAVE_IMAGE= 1
         /**
          * Max preview width that is guaranteed by Camera2 API
          */
@@ -480,11 +505,18 @@ class Camera(private val mContext: Context) {
 }
 
 
-class ImageListener : ImageReader.OnImageAvailableListener {
+class ImageListener(val camera: Camera) : ImageReader.OnImageAvailableListener {
     override fun onImageAvailable(reader: ImageReader?) {
         var image = reader?.acquireLatestImage()
-        Log.d("Camera", "--save image-->" + image?.format)
-        image?.format
+        Log.d("Camera", "--save image-->" + image?.planes?.size)
+
+        val buffers = image?.planes?.get(0)?.buffer
+        camera.mCurrentImage = buffers
+        val msg = Message.obtain()
+        msg.what = Camera.MESSAGE_SAVE_IMAGE
+        camera.mHandler?.sendMessage(msg)
+        camera.cameraOpenCloseLock.acquire()
+//        Okio.buffer(buffers)
     }
 }
 
