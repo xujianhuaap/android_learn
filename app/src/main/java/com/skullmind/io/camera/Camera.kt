@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.CAMERA_SERVICE
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.graphics.*
 import android.hardware.camera2.*
 import android.media.ImageReader
@@ -31,19 +30,18 @@ class Camera(private val mContext: Context) {
     private val mCameraManager = getCameraManger()
     var mHandler: Handler? = null
 
-    lateinit var mCameraId: String
+    private lateinit var mCameraId: String
     var mCurrentImage:ByteBuffer? = null
     var mSurface: Surface? = null
     private var mSurfaceConfig = SurfaceConfig(mCameraManager)
-    var imageReader: ImageReader? = null
+    private var imageReader: ImageReader? = null
 
     lateinit var mPreviewRequest: CaptureRequest
     lateinit var mCaptureRequest: CaptureRequest
     var mSession: CameraCaptureSession? = null
     var cameraDevice: CameraDevice? = null
 
-    private var isTakePhoto: Boolean = false
-    private var isPreview: Boolean = true
+    private lateinit var mState:CameraState
     private var enableFlash = false
     var cameraSessionCaptureCallBack: CameraCaptureSession.CaptureCallback =
         object : CameraCaptureSession.CaptureCallback() {
@@ -58,10 +56,11 @@ class Camera(private val mContext: Context) {
                 result: TotalCaptureResult
             ) {
                 super.onCaptureCompleted(session, request, result)
-                if (isTakePhoto) {
+                if (mState == CameraState.STATE_LOCK) {
                     Log.e("Camera", "---->stopRepeat")
                     mSession?.stopRepeating()
                     mSession?.abortCaptures()
+                    mState = CameraState.STATE_UNLOCK
                 }
                 Log.e("Camera", "---->onCaptureCompleted")
             }
@@ -109,16 +108,15 @@ class Camera(private val mContext: Context) {
                 Log.e("Camera", "---->onCaptureBufferLost")
             }
         }
-    var cameraSessionStateCallback: CameraCaptureSession.StateCallback = object : CameraCaptureSession.StateCallback() {
+    private var cameraSessionStateCallback: CameraCaptureSession.StateCallback = object : CameraCaptureSession.StateCallback() {
         override fun onReady(session: CameraCaptureSession) {
             super.onReady(session)
             Log.e("Camera", "--state-->onReady")
-            if (isTakePhoto) {
-                isTakePhoto = false
-                isPreview = false
-                session.capture(mCaptureRequest, cameraSessionCaptureCallBack, mHandler)
-            } else if (isPreview) {
-                session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
+            when(mState){
+                CameraState.STATE_LOCK ->
+                    session.capture(mCaptureRequest, cameraSessionCaptureCallBack, mHandler)
+                CameraState.STATE_PREVIEW ->
+                    session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
             }
         }
 
@@ -147,11 +145,9 @@ class Camera(private val mContext: Context) {
         override fun onConfigured(session: CameraCaptureSession) {
             Log.e("Camera", "--state-->onConfigured")
             mSession = session
-            if (isTakePhoto) {
-                session.stopRepeating()
-                session.capture(mCaptureRequest, cameraSessionCaptureCallBack, mHandler)
-            } else if (isPreview) {
-                session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
+            when(mState){
+                CameraState.STATE_OPENED ->
+                    session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
             }
         }
 
@@ -166,6 +162,7 @@ class Camera(private val mContext: Context) {
         override fun onOpened(camera: CameraDevice) {
             Log.e("Camera", "--device state -->onOpened")
             cameraDevice = camera
+            mState = CameraState.STATE_OPENED
             assert(mSurface?.isValid ?: false)
             cameraOpenCloseLock.release()
             createCaptureSession(camera)
@@ -177,17 +174,20 @@ class Camera(private val mContext: Context) {
         override fun onClosed(camera: CameraDevice) {
             super.onClosed(camera)
             Log.e("Camera", "--device state -->onClosed")
-            cameraDevice = null
+            releaseCamera()
+            mState = CameraState.STATE_UNOPEN
         }
 
         override fun onDisconnected(camera: CameraDevice) {
             Log.e("Camera", "--device state -->onDisconnected")
             cameraOpenCloseLock.release()
-            cameraDevice = null
+            releaseCamera()
+            mState = CameraState.STATE_UNOPEN
         }
 
         override fun onError(camera: CameraDevice, error: Int) {
-            cameraDevice = null
+            releaseCamera()
+            mState = CameraState.STATE_UNOPEN
             Log.e("Camera", "--device state -->onError")
         }
     }
@@ -199,13 +199,13 @@ class Camera(private val mContext: Context) {
 
     private fun buildPreviewRequest(camera: CameraDevice) {
         val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        builder.addTarget(mSurface)
+        builder.addTarget(mSurface!!)
         mPreviewRequest = builder.build()
     }
 
     private fun buildCaptureRequest(camera: CameraDevice) {
         val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        builder.addTarget(imageReader?.surface)
+        builder.addTarget(imageReader?.surface!!)
         builder.set(
             CaptureRequest.CONTROL_AF_MODE,
             CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
@@ -261,7 +261,9 @@ class Camera(private val mContext: Context) {
 
 
     fun previewPhoto() {
-        isPreview = true
+        if(mState == CameraState.STATE_OPENED || mState == CameraState.STATE_UNLOCK){
+            mState = CameraState.STATE_PREVIEW
+        }
         assert(cameraDevice != null)
         if (mSession == null) {
             createCaptureSession(cameraDevice!!)
@@ -271,7 +273,7 @@ class Camera(private val mContext: Context) {
     }
 
     fun takePhoto() {
-        isTakePhoto = true
+       mState = CameraState.STATE_LOCK
     }
 
     fun cameraEnable(): Boolean = cameraDevice != null
@@ -297,7 +299,7 @@ class Camera(private val mContext: Context) {
             when(msg?.what){
                 MESSAGE_SAVE_IMAGE ->{
                    val dir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    val simpleDateFormat = SimpleDateFormat("yyyyMMddHHmmss")
+                    val simpleDateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA)
                     val imgName = simpleDateFormat.format(Date())+".jpg"
                     val imgFile = File(dir,imgName)
                     if(imgFile.exists()){
@@ -318,16 +320,17 @@ class Camera(private val mContext: Context) {
         mHandler = initHandler(looper)
     }
 
-    fun configureTransform(width:Int,height:Int,activity:CameraActivity){
-        mSurfaceConfig.configureTransform(width,height,activity)
+    fun updateCameraViewTransform(width:Int, height:Int, activity:CameraActivity){
+        val matrix = mSurfaceConfig.obtainCameraViewTransform(width,height,activity)
+        activity.updateCameraViewMatrix(matrix)
     }
-    fun setUpCameraOutputs(width: Int, height: Int, activity: CameraActivity){
+    fun initFrontCamera(width: Int, height: Int, activity: CameraActivity,success:(previewSize:Size?)->Unit){
 
-        mSurfaceConfig.setUpFrontCameraOutputs(width,height,activity){
+        mSurfaceConfig.initFrontCamera(width,height,activity){
                 cameraConfig,largestSize,previewSize ->
             mCameraId = cameraConfig.cameraId
             enableFlash = cameraConfig.enableFlash
-            activity.updateCameraView(previewSize)
+            success(previewSize)
             initImageReader(largestSize)}
 
     }
@@ -341,9 +344,8 @@ class Camera(private val mContext: Context) {
 
 class ImageListener(val camera: Camera) : ImageReader.OnImageAvailableListener {
     override fun onImageAvailable(reader: ImageReader?) {
-        var image = reader?.acquireLatestImage()
+        val image = reader?.acquireLatestImage()
         Log.d("Camera", "--save image-->" + image?.planes?.size)
-
         val buffers = image?.planes?.get(0)?.buffer
         camera.mCurrentImage = buffers
         val msg = Message.obtain()

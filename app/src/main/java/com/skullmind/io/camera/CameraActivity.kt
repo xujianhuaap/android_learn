@@ -3,10 +3,8 @@ package com.skullmind.io.camera
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Configuration
 import android.graphics.*
-import android.media.ImageReader
 import android.os.*
 import android.util.Log
 import android.util.Size
@@ -162,7 +160,10 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
-    fun updateCameraView(previewSize: Size?) {
+    /**
+     * 更新高宽比例
+     */
+    fun updateCameraViewAspectRatio(previewSize: Size?) {
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             cameraDevice.setAspectRatio(previewSize?.width!!, previewSize?.height!!)
         } else {
@@ -170,6 +171,9 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    fun updateCameraViewMatrix(matrix: Matrix){
+        cameraDevice.setTransform(matrix)
+    }
     companion object{
         val PERMISSIONS = listOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
@@ -179,7 +183,7 @@ class CameraActivity : AppCompatActivity() {
 class SurfaceHolderCallBack(val activity: CameraActivity,val camera:Camera):TextureView.SurfaceTextureListener{
     override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
         Log.d("Camera","--Surface state--> onSurfaceTextureSizeChanged")
-        camera.configureTransform(width,height,activity)
+        camera.updateCameraViewTransform(width,height,activity)
     }
 
     override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
@@ -194,8 +198,10 @@ class SurfaceHolderCallBack(val activity: CameraActivity,val camera:Camera):Text
             surface.setDefaultBufferSize(activity.cameraDevice.width,activity.cameraDevice.height)
             val previewSurface = Surface(surface)
             camera.mSurface = previewSurface
-            camera.setUpCameraOutputs(width,height,activity)
-            camera.configureTransform(width,height,activity)
+            camera.initFrontCamera(width,height,activity){
+                activity.updateCameraViewAspectRatio(it)
+            }
+            camera.updateCameraViewTransform(width,height,activity)
             if(!camera.cameraEnable()){
                 activity.openCamera()
             }

@@ -14,7 +14,7 @@ import kotlin.math.max
 class  SurfaceConfig(private val mCameraManager: CameraManager) {
     var previewSize: Size? = null
 
-    fun setUpFrontCameraOutputs(width: Int, height: Int, activity: CameraActivity, success:(CameraConfig, Size,Size?)->Unit) {
+    fun initFrontCamera(width: Int, height: Int, activity: CameraActivity, success:(CameraConfig, Size, Size?)->Unit) {
         try {
             for (cameraId in mCameraManager.cameraIdList) {
                 val characteristics = mCameraManager.getCameraCharacteristics(cameraId)
@@ -23,9 +23,7 @@ class  SurfaceConfig(private val mCameraManager: CameraManager) {
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
                 if (cameraDirection != null &&
                     cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
-                ) {
-                    continue
-                }
+                ) continue
 
                 val map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
@@ -90,7 +88,7 @@ class  SurfaceConfig(private val mCameraManager: CameraManager) {
 
 
 
-    fun configureTransform(viewWidth: Int, viewHeight: Int, activity: CameraActivity) {
+    fun obtainCameraViewTransform(viewWidth: Int, viewHeight: Int, activity: CameraActivity):Matrix {
         val rotation = activity.windowManager.defaultDisplay.rotation
         val matrix = Matrix()
         val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
@@ -112,7 +110,7 @@ class  SurfaceConfig(private val mCameraManager: CameraManager) {
         } else if (Surface.ROTATION_180 == rotation) {
             matrix.postRotate(180f, centerX, centerY)
         }
-        activity.cameraDevice.setTransform(matrix)
+         return matrix
     }
 
 
