@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
-import kotlin.math.sin
 
 
 class Camera(private val mContext: Context) {
@@ -35,7 +34,7 @@ class Camera(private val mContext: Context) {
     lateinit var mCameraId: String
     var mCurrentImage:ByteBuffer? = null
     var mSurface: Surface? = null
-    var previewSize: Size? = null
+    private var mSurfaceConfig = SurfaceConfig(mCameraManager)
     var imageReader: ImageReader? = null
 
     lateinit var mPreviewRequest: CaptureRequest
@@ -117,7 +116,6 @@ class Camera(private val mContext: Context) {
             if (isTakePhoto) {
                 isTakePhoto = false
                 isPreview = false
-//                session.capture(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
                 session.capture(mCaptureRequest, cameraSessionCaptureCallBack, mHandler)
             } else if (isPreview) {
                 session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
@@ -148,15 +146,11 @@ class Camera(private val mContext: Context) {
 
         override fun onConfigured(session: CameraCaptureSession) {
             Log.e("Camera", "--state-->onConfigured")
-//            session.prepare(cameraDevice.holder.surface)
             mSession = session
             if (isTakePhoto) {
                 session.stopRepeating()
                 session.capture(mCaptureRequest, cameraSessionCaptureCallBack, mHandler)
             } else if (isPreview) {
-                if(mPreviewRequest == null){
-                    buildPreviewRequest(cameraDevice!!)
-                }
                 session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
             }
         }
@@ -240,127 +234,31 @@ class Camera(private val mContext: Context) {
             return
         }
         if (cameraEnable()) return
-
-        if (!checkCameraValid(mCameraId)) throw RuntimeException(" valid camera")
-
-        updateCameraConfig(mCameraId)
-        if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
+        if (!checkCameraValid(mCameraId))
+            throw RuntimeException(" valid camera $mCameraId")
+        if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS))
             throw RuntimeException("Time out waiting to lock camera opening.")
-        }
-        mCameraManager.openCamera(mCameraId, deviceStateCallBack, mHandler)
-    }
 
-    fun setUpCameraOutputs(width: Int, height: Int, activity: CameraActivity) {
         try {
-            for (cameraId in mCameraManager.cameraIdList) {
-                val characteristics = mCameraManager.getCameraCharacteristics(cameraId)
-
-                // We don't use a front facing camera in this sample.
-                val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (cameraDirection != null &&
-                    cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
-                ) {
-                    continue
-                }
-
-                val map = characteristics.get(
-                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-                ) ?: continue
-
-                // For still image captures, we use the largest available size.
-                val largest = Collections.max(
-                    Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
-                    CompareSizesByArea()
-                )
-                imageReader = ImageReader.newInstance(
-                    largest.width, largest.height,
-                    ImageFormat.JPEG, /*maxImages*/ 2
-                )
-                imageReader?.setOnImageAvailableListener(ImageListener(this), mHandler)
-
-                // 0 屏幕未旋转,90 屏幕顺时针旋转90
-                val displayRotation = activity.windowManager.defaultDisplay.rotation
-                //[0,90,180,270]
-                val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
-                val swappedDimensions = Config.areDimensionsSwapped(displayRotation, sensorOrientation)
-
-                val displaySize = Point()
-                activity.windowManager.defaultDisplay.getSize(displaySize)
-                val rotatedPreviewWidth = if (swappedDimensions) height else width
-                val rotatedPreviewHeight = if (swappedDimensions) width else height
-                var maxPreviewWidth = if (swappedDimensions) displaySize.y else displaySize.x
-                var maxPreviewHeight = if (swappedDimensions) displaySize.x else displaySize.y
-
-                if (maxPreviewWidth > MAX_PREVIEW_WIDTH) maxPreviewWidth = MAX_PREVIEW_WIDTH
-                if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) maxPreviewHeight = MAX_PREVIEW_HEIGHT
-
-                // Danger, W.R.! Attempting to use too large a preview size could exceed the camera
-                // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
-                // garbage capture data.
-                previewSize = chooseOptimalSize(
-                    map.getOutputSizes(SurfaceTexture::class.java),
-                    rotatedPreviewWidth, rotatedPreviewHeight,
-                    maxPreviewWidth, maxPreviewHeight,
-                    largest
-                )
-
-                // We fit the aspect ratio of TextureView to the size of preview we picked.
-                if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    activity.cameraDevice.setAspectRatio(previewSize?.width!!, previewSize?.height!!)
-                } else {
-                    activity.cameraDevice.setAspectRatio(previewSize?.height!!, previewSize?.width!!)
-                }
-
-                // Check if the flash is supported.
-                enableFlash =
-                    characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-
-                this.mCameraId = cameraId
-
-                // We've found a viable camera and finished setting up member variables,
-                // so we don't need to iterate through other available cameras.
-                return
-            }
-        } catch (e: CameraAccessException) {
-            Log.e("Camera", e.toString())
-        } catch (e: NullPointerException) {
-            // Currently an NPE is thrown when the Camera2API is used but not supported on the
-            // device this code runs.
-            Log.e("Camera", e.toString())
+            mSurfaceConfig.updateCameraConfig(mCameraId)
+            Log.e("Camera","--open Camera Id $mCameraId")
+            mCameraManager.openCamera(mCameraId, deviceStateCallBack, mHandler)
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
+            releaseCamera()
         }
-
     }
 
-    fun configureTransform(viewWidth: Int, viewHeight: Int, activity: CameraActivity) {
-        val rotation = activity.windowManager.defaultDisplay.rotation
-        val matrix = Matrix()
-        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
-        val bufferRect = RectF(0f, 0f, previewSize?.height?.toFloat()!!, previewSize?.width?.toFloat()!!)
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
 
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-            val scale = Math.max(
-                viewHeight.toFloat() / previewSize?.height!!,
-                viewWidth.toFloat() / previewSize?.width!!
-            )
-            with(matrix) {
-                setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
-                postScale(scale, scale, centerX, centerY)
-                postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
-            }
-        } else if (Surface.ROTATION_180 == rotation) {
-            matrix.postRotate(180f, centerX, centerY)
-        }
-        activity.cameraDevice.setTransform(matrix)
+
+    private fun initImageReader(largest: Size) {
+        imageReader = ImageReader.newInstance(
+            largest.width, largest.height,
+            ImageFormat.JPEG, /*maxImages*/ 2
+        )
+        imageReader?.setOnImageAvailableListener(ImageListener(this), mHandler)
     }
 
-    fun updateCameraConfig(cameraId: String) {
-        val characteristics = mCameraManager.getCameraCharacteristics(cameraId)
-        val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
-        previewSize = map!!.getOutputSizes(SurfaceTexture::class.java)[0]
-    }
 
     fun previewPhoto() {
         isPreview = true
@@ -420,63 +318,23 @@ class Camera(private val mContext: Context) {
         mHandler = initHandler(looper)
     }
 
+    fun configureTransform(width:Int,height:Int,activity:CameraActivity){
+        mSurfaceConfig.configureTransform(width,height,activity)
+    }
+    fun setUpCameraOutputs(width: Int, height: Int, activity: CameraActivity){
+
+        mSurfaceConfig.setUpFrontCameraOutputs(width,height,activity){
+                cameraConfig,largestSize,previewSize ->
+            mCameraId = cameraConfig.cameraId
+            enableFlash = cameraConfig.enableFlash
+            activity.updateCameraView(previewSize)
+            initImageReader(largestSize)}
+
+    }
+
+
     companion object {
         const val MESSAGE_SAVE_IMAGE = 1
-        /**
-         * Max preview width that is guaranteed by Camera2 API
-         */
-        private const  val MAX_PREVIEW_WIDTH = 1920
-
-        /**
-         * Max preview height that is guaranteed by Camera2 API
-         */
-        private const val MAX_PREVIEW_HEIGHT = 1080
-
-
-
-        /***
-         * @param choices 是根据Camera Manager 提供的对应CameraId 的CameraCharacteristics.从CameraCharacteristics中,
-         * 提取可用的TextureViewSurface 的Size(包含width 和 height 信息)的Collections.
-         */
-        @JvmStatic
-        private fun chooseOptimalSize(
-            choices: Array<Size>,
-            textureViewWidth: Int,
-            textureViewHeight: Int,
-            maxWidth: Int,
-            maxHeight: Int,
-            aspectRatio: Size
-        ): Size {
-
-            // Collect the supported resolutions that are at least as big as the preview Surface
-            val bigEnough = ArrayList<Size>()
-            // Collect the supported resolutions that are smaller than the preview Surface
-            val notBigEnough = ArrayList<Size>()
-            val w = aspectRatio.width
-            val h = aspectRatio.height
-            for (option in choices) {
-                if (option.width <= maxWidth && option.height <= maxHeight &&
-                    option.height == option.width * h / w
-                ) {
-                    if (option.width >= textureViewWidth && option.height >= textureViewHeight) {
-                        bigEnough.add(option)
-                    } else {
-                        notBigEnough.add(option)
-                    }
-                }
-            }
-
-            // Pick the smallest of those big enough. If there is no one big enough, pick the
-            // largest of those not big enough.
-            if (bigEnough.size > 0) {
-                return Collections.min(bigEnough, CompareSizesByArea())
-            } else if (notBigEnough.size > 0) {
-                return Collections.max(notBigEnough, CompareSizesByArea())
-            } else {
-                Log.e("Camera", "Couldn't find any suitable preview size")
-                return choices[0]
-            }
-        }
     }
 }
 
@@ -490,9 +348,9 @@ class ImageListener(val camera: Camera) : ImageReader.OnImageAvailableListener {
         camera.mCurrentImage = buffers
         val msg = Message.obtain()
         msg.what = Camera.MESSAGE_SAVE_IMAGE
+        camera.saveImageLock.acquire()
         camera.mHandler?.sendMessage(msg)
-        camera.cameraOpenCloseLock.acquire()
-//        Okio.buffer(buffers)
+
     }
 }
 
@@ -503,7 +361,6 @@ class ImageListener(val camera: Camera) : ImageReader.OnImageAvailableListener {
  */
 internal class CompareSizesByArea : Comparator<Size> {
 
-    // We cast here to ensure the multiplications won't overflow
     override fun compare(lhs: Size, rhs: Size) =
         java.lang.Long.signum(lhs.width.toLong() * lhs.height - rhs.width.toLong() * rhs.height)
 

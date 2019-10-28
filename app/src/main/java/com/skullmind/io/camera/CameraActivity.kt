@@ -4,10 +4,12 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.content.res.Configuration
 import android.graphics.*
 import android.media.ImageReader
 import android.os.*
 import android.util.Log
+import android.util.Size
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -88,7 +90,6 @@ class CameraActivity : AppCompatActivity() {
 
         initViewModel(name)
 
-        camera.updateCameraConfig("0")
     }
 
     override fun onResume() {
@@ -159,6 +160,14 @@ class CameraActivity : AppCompatActivity() {
             Log.e("Camera", e.toString())
         }
 
+    }
+
+    fun updateCameraView(previewSize: Size?) {
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            cameraDevice.setAspectRatio(previewSize?.width!!, previewSize?.height!!)
+        } else {
+            cameraDevice.setAspectRatio(previewSize?.height!!, previewSize?.width!!)
+        }
     }
 
     companion object{
