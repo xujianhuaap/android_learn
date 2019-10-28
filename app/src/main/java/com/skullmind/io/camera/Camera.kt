@@ -25,8 +25,7 @@ import java.util.concurrent.TimeUnit
 
 
 class Camera(private val mContext: Context) {
-    val cameraOpenCloseLock = Semaphore(1)
-    val saveImageLock = Semaphore(1)
+
     private val mCameraManager = getCameraManger()
     var mHandler: Handler? = null
 
@@ -41,7 +40,7 @@ class Camera(private val mContext: Context) {
     var mSession: CameraCaptureSession? = null
     var cameraDevice: CameraDevice? = null
 
-    private lateinit var mState:CameraState
+    private var mState:CameraState = CameraState.STATE_UNOPEN
     private var enableFlash = false
     var cameraSessionCaptureCallBack: CameraCaptureSession.CaptureCallback =
         object : CameraCaptureSession.CaptureCallback() {
@@ -56,11 +55,11 @@ class Camera(private val mContext: Context) {
                 result: TotalCaptureResult
             ) {
                 super.onCaptureCompleted(session, request, result)
-                if (mState == CameraState.STATE_LOCK) {
+                if (mState == CameraState.STATE_CAPTURE_LOCK) {
                     Log.e("Camera", "---->stopRepeat")
                     mSession?.stopRepeating()
                     mSession?.abortCaptures()
-                    mState = CameraState.STATE_UNLOCK
+                    mState = CameraState.STATE_CAPTURE_UNLOCK
                 }
                 Log.e("Camera", "---->onCaptureCompleted")
             }
@@ -113,7 +112,7 @@ class Camera(private val mContext: Context) {
             super.onReady(session)
             Log.e("Camera", "--state-->onReady")
             when(mState){
-                CameraState.STATE_LOCK ->
+                CameraState.STATE_CAPTURE_LOCK ->
                     session.capture(mCaptureRequest, cameraSessionCaptureCallBack, mHandler)
                 CameraState.STATE_PREVIEW ->
                     session.setRepeatingRequest(mPreviewRequest, cameraSessionCaptureCallBack, mHandler)
@@ -126,15 +125,13 @@ class Camera(private val mContext: Context) {
         }
 
         override fun onConfigureFailed(session: CameraCaptureSession) {
-            mSession = null
-            cameraDevice = null
+            releaseCamera()
         }
 
         override fun onClosed(session: CameraCaptureSession) {
             super.onClosed(session)
             Log.e("Camera", "--state-->onClosed")
-            mSession = null
-            cameraDevice = null
+            releaseCamera()
         }
 
         override fun onSurfacePrepared(session: CameraCaptureSession, surface: Surface) {
@@ -261,7 +258,7 @@ class Camera(private val mContext: Context) {
 
 
     fun previewPhoto() {
-        if(mState == CameraState.STATE_OPENED || mState == CameraState.STATE_UNLOCK){
+        if(mState == CameraState.STATE_OPENED || mState == CameraState.STATE_CAPTURE_UNLOCK){
             mState = CameraState.STATE_PREVIEW
         }
         assert(cameraDevice != null)
@@ -273,7 +270,7 @@ class Camera(private val mContext: Context) {
     }
 
     fun takePhoto() {
-       mState = CameraState.STATE_LOCK
+       mState = CameraState.STATE_CAPTURE_LOCK
     }
 
     fun cameraEnable(): Boolean = cameraDevice != null
@@ -285,7 +282,6 @@ class Camera(private val mContext: Context) {
 
     fun releaseCamera() {
         imageReader?.close()
-        mSession?.stopRepeating()
         mSession?.close()
         cameraDevice?.close()
         mSurface?.release()
@@ -338,6 +334,8 @@ class Camera(private val mContext: Context) {
 
     companion object {
         const val MESSAGE_SAVE_IMAGE = 1
+        val cameraOpenCloseLock = Semaphore(1)
+        val saveImageLock = Semaphore(1)
     }
 }
 
@@ -350,7 +348,7 @@ class ImageListener(val camera: Camera) : ImageReader.OnImageAvailableListener {
         camera.mCurrentImage = buffers
         val msg = Message.obtain()
         msg.what = Camera.MESSAGE_SAVE_IMAGE
-        camera.saveImageLock.acquire()
+        Camera.saveImageLock.acquire()
         camera.mHandler?.sendMessage(msg)
 
     }
