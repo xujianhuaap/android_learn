@@ -42,6 +42,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation libraries.kotlin
     implementation libraries.kotlin_reflect
+    implementation libraries.kotlin_coroutines
     implementation libraries.dagger
     implementation libraries.daggerSupport
     kapt libraries.daggerAndroidApt
