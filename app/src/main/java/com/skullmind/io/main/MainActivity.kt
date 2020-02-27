@@ -1,9 +1,12 @@
 package com.skullmind.io.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.skullmind.io.R
 import kotlinx.coroutines.*
 
@@ -64,5 +67,6 @@ class MainActivity : AppCompatActivity(){
 
             Log.d(TAG,"====")
         }
+
     }
 }

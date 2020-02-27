@@ -24,6 +24,7 @@ ext{
             android_support       : '28.0.0',
             recycler_view          : '1.0.0',
             lifecycle              : '2.1.0',
+            ktx                   :'1.0.1',
             android_test_runner   : '1.0.2',
             android_test_espresso : '3.0.2',
 
@@ -48,6 +49,7 @@ ext{
             appcompat_v7           :"com.android.support:appcompat-v7:${versions.android_support}",
             recycler_view           :"androidx.recyclerview:recyclerview:${versions.recycler_view}",
             lifecycle               :"androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
+            ktx                    :"androidx.core:core-ktx:${versions.ktx}",
             constraint_layout      :"com.android.support.constraint:constraint-layout:${versions.constraint_layout}",
             //ForTest
             junit                  :"junit:junit:${versions.junit}",

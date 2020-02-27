@@ -60,6 +60,7 @@ dependencies {
     implementation libraries.constraint_layout
     implementation  libraries.recycler_view
     implementation libraries.lifecycle
+    implementation libraries.ktx
 
 
 
