@@ -7,8 +7,17 @@ import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.skullmind.io.R
+import com.skullmind.io.task.HidedWorker
+import com.skullmind.io.uitils.SHARE_PREFERENCES_KEY_APP_NAME
+import com.skullmind.io.uitils.SharePreferencesUtil
 import kotlinx.coroutines.*
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 val  TAG = MainActivity::class.java.simpleName
 
@@ -30,43 +39,11 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG,"Main Thread")
-        runBlocking {
-            threadLocal.set("main")
-            val job =   launch(Dispatchers.Default+threadLocal.asContextElement()) {
-                try {
-                    Log.d(TAG,"start delay")
-//                    var i = 0
-//                    var time = System.currentTimeMillis()
-//                    while (isActive){
-//                        var nextTime = System.currentTimeMillis()
-//                        if( nextTime- time >= 200){
-//                            i++
-//                            Log.d(TAG,"${i-1}")
-//                            time = nextTime
-//                        }
-//                    }
-                    repeat(1000){
-                        delay(100)
-                        Log.d(TAG,"${it}")
-                    }
-                    Log.d(TAG,"delay end")
-                }finally {
-                    withContext(NonCancellable){
-                        delay(100)
-                        Log.d(TAG,"finally delay")
-                    }
-                }
-
-            }
-            Log.d(TAG,"RunBlocking delay start")
-            delay(1000*3)
-            Log.d(TAG,"RunBlocking delay End")
-            job.cancelAndJoin()
-            Log.d(TAG,"job cancel")
-
-            Log.d(TAG,"====")
-        }
-
+        SharePreferencesUtil.edit { putString(SHARE_PREFERENCES_KEY_APP_NAME,"android learn"+Math.random()*100) }
+        Log.d(MainActivity::class.java.simpleName,SharePreferencesUtil.getString(SHARE_PREFERENCES_KEY_APP_NAME))
+        val constraints = Constraints.Builder().setRequiresCharging(true).build()
+        val worker = PeriodicWorkRequestBuilder<HidedWorker>(100,TimeUnit.MILLISECONDS)
+            .setConstraints(constraints).build()
+        WorkManager.getInstance(this).enqueue(worker)
     }
 }

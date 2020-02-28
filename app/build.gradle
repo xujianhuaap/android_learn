@@ -28,6 +28,9 @@ android {
         targetCompatibility = '1.8'
     }
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
     dataBinding {
         enabled = true
     }
@@ -61,6 +64,7 @@ dependencies {
     implementation  libraries.recycler_view
     implementation libraries.lifecycle
     implementation libraries.ktx
+    implementation libraries.work_manager
 
 
 

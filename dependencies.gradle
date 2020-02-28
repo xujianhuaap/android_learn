@@ -25,6 +25,7 @@ ext{
             recycler_view          : '1.0.0',
             lifecycle              : '2.1.0',
             ktx                   :'1.0.1',
+            work_manager          : '2.3.2',
             android_test_runner   : '1.0.2',
             android_test_espresso : '3.0.2',
 
@@ -50,6 +51,7 @@ ext{
             recycler_view           :"androidx.recyclerview:recyclerview:${versions.recycler_view}",
             lifecycle               :"androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
             ktx                    :"androidx.core:core-ktx:${versions.ktx}",
+            work_manager            :"androidx.work:work-runtime-ktx:${versions.work_manager}",
             constraint_layout      :"com.android.support.constraint:constraint-layout:${versions.constraint_layout}",
             //ForTest
             junit                  :"junit:junit:${versions.junit}",

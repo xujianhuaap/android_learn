@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
+const val SHARE_PREFERENCES_KEY_APP_NAME = "sp_key_app_name"
 class SharePreferencesUtil {
     var sharePreferences:SharedPreferences?=null
     private constructor(context: Context){
@@ -12,17 +13,26 @@ class SharePreferencesUtil {
 
 
     companion object{
-        var instance:SharePreferencesUtil ?= null
+        private var instance:SharePreferencesUtil ?= null
         @Synchronized
-        private fun getInstance(context: Context):SharePreferencesUtil{
+        private fun getInstances(context: Context):SharePreferencesUtil{
             if(instance == null){
                 instance = SharePreferencesUtil(context)
             }
-            return instance
+            return instance as SharePreferencesUtil
         }
 
         fun init(context: Context){
-            instance.context = context
+            getInstances(context)
         }
+
+        fun edit(action:SharedPreferences.Editor.()->Unit){
+            instance?.sharePreferences?.edit {
+                action()
+            }
+        }
+
+        fun getString(key:String):String = instance?.sharePreferences?.getString(key,"")?:""
+
     }
 }
