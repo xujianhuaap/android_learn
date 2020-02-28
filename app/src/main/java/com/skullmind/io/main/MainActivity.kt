@@ -33,15 +33,8 @@ class MainActivity : AppCompatActivity(){
 
         SharePreferencesUtil.edit { putString(SHARE_PREFERENCES_KEY_APP_NAME,"android learn"+Math.random()*100) }
         Log.d(MainActivity::class.java.simpleName,SharePreferencesUtil.getString(SHARE_PREFERENCES_KEY_APP_NAME))
-        val constraints = Constraints.Builder().setRequiresCharging(true).build()
-        val data = Data.Builder().putString("app",SharePreferencesUtil.getString(SHARE_PREFERENCES_KEY_APP_NAME)).build()
-        val worker = PeriodicWorkRequestBuilder<PeriodWorker>(2,TimeUnit.MINUTES)
-            .setInputData(data)
-            .setBackoffCriteria(BackoffPolicy.LINEAR,5,TimeUnit.SECONDS)
-            .setConstraints(constraints).build()
-        WorkManager.getInstance(this).enqueue(worker)
-        val oneTimeWorker = OneTimeWorkRequestBuilder<OneTimeWorker>().build()
-        WorkManager.getInstance(this).beginWith(oneTimeWorker).enqueue()
+
+//
 
     }
 }
