@@ -3,13 +3,9 @@ package com.skullmind.io.main
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.work.*
 import com.skullmind.io.R
-import com.skullmind.io.task.OneTimeWorker
-import com.skullmind.io.task.PeriodWorker
 import com.skullmind.io.uitils.SHARE_PREFERENCES_KEY_APP_NAME
 import com.skullmind.io.uitils.SharePreferencesUtil
-import java.util.concurrent.TimeUnit
 
 val  TAG = MainActivity::class.java.simpleName
 

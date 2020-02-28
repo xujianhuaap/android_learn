@@ -1,6 +1,5 @@
-package com.skullmind.io.task
+package com.skullmind.io.work_manger
 
-import android.app.Application
 import android.content.Context
 import androidx.work.*
 import com.skullmind.io.uitils.SHARE_PREFERENCES_KEY_APP_NAME
