@@ -250,7 +250,7 @@ class Camera(private val mContext: Context) {
         mCameraManager.openCamera(mCameraId, deviceStateCallBack, mHandler)
     }
 
-    fun setUpCameraOutputs(width: Int, height: Int, activity: CameraActivity) {
+    fun setUpCameraOutputs(width: Int, height: Int, activity: CameraActivity)  {
         try {
             for (cameraId in mCameraManager.cameraIdList) {
                 val characteristics = mCameraManager.getCameraCharacteristics(cameraId)
