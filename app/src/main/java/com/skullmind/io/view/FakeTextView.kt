@@ -3,6 +3,7 @@ package com.skullmind.io.view
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
@@ -18,7 +19,7 @@ import com.skullmind.io.main.MainVM
         method = "setBackgroundColor"
     )]
 )
-class FakeTextView :TextView{
+class FakeTextView :AppCompatTextView{
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
