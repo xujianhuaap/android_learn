@@ -78,4 +78,7 @@ dependencies {
     testImplementation libraries.test_core
     androidTestImplementation libraries.android_test_runner
     androidTestImplementation libraries.espresso_core
+
+    //androidx
+    implementation libraries.security_cryto
 }
