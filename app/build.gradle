@@ -28,6 +28,10 @@ android {
         targetCompatibility = '1.8'
     }
 
+    kotlinOptions{
+        jvmTarget = '1.8'
+    }
+
     dataBinding {
         enabled = true
     }
@@ -59,6 +63,10 @@ dependencies {
     implementation libraries.constraint_layout
     implementation  libraries.recycler_view
     implementation libraries.lifecycle
+    implementation libraries.tink
+    //jetpack
+    implementation libraries.security_crypto
+    implementation libraries.ktx
 
 
 
@@ -68,7 +76,9 @@ dependencies {
     testImplementation libraries.power_mock_junit_rule
     testImplementation libraries.power_mock_api
     testImplementation libraries.power_mock_classloading
-    testImplementation libraries.robolectric
+    testImplementation( libraries.robolectric){
+        exclude(group:"com.google.protobuf",module:"protobuf-java")
+    }
     testImplementation libraries.test_core
     androidTestImplementation libraries.android_test_runner
     androidTestImplementation libraries.espresso_core

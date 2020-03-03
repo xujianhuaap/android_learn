@@ -2,12 +2,10 @@ package com.skullmind.io.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
-import com.skullmind.io.main.MainVM
 
 /***
  * 对于setBackgroundColor(int)这个方法重新定义属性

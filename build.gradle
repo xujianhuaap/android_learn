@@ -3,6 +3,7 @@
 buildscript {
     apply from: rootProject.file('dependencies.gradle')
     repositories {
+        mavenCentral()
         google()
         jcenter()
         
@@ -17,6 +18,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
         
@@ -26,4 +28,15 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task printMe(){
+    println("-------")
+}
+task printDependencies(type:Copy){
+    into "$buildDir/outputs/ss.txt"
+    from "$buildDir()"
+    doFirst {
+        println ">> Compilation deps: "
+    }
 }
