@@ -1,0 +1,8 @@
+apply plugin: 'groovy'
+repositories {
+    flatDir name: 'libs', dirs: "../build/libs"
+}
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}

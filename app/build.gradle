@@ -82,3 +82,16 @@ dependencies {
     //androidx
     implementation libraries.security_cryto
 }
+
+afterEvaluate {
+    tasks.matching {Task task -> task.name == "printDependencies"}.forEach({
+        Task t ->
+            t.dependsOn(tasks.getByName("clean"))
+    })
+}
+
+task printDependencies(type:Copy){
+    println("====print")
+    from "${rootProject.projectDir}/settings.gradle"
+    into "${rootProject.projectDir}/temp/"
+}

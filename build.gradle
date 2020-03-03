@@ -1,9 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    println("===> project buildscript")
     apply from: rootProject.file('dependencies.gradle')
     repositories {
-        google()git
+        flatDir name: 'libs', dirs: "../build/libs"
+        google()
         jcenter()
         
     }
@@ -13,6 +15,9 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
+    rootProject.configurations.create("learn_config")
+
 }
 
 allprojects {
@@ -24,6 +29,21 @@ allprojects {
     apply from: rootProject.file('dependencies.gradle')
 }
 
+afterEvaluate {
+    println("====afterEvaluate=====")
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
+    delete "${rootProject.projectDir}/temp"
+    delete "${rootProject.projectDir}/temp.txt"
+    println("====clean end=====")
 }
+
+apply plugin: 'com.skullmind.io.plugins.DemoPlugin'
+
+
+
+
+
+
