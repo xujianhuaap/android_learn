@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    println("===> project buildscript")
+    println("=== project buildscript ===")
     apply from: rootProject.file('dependencies.gradle')
     repositories {
         flatDir name: 'libs', dirs: "../build/libs"
@@ -30,17 +30,22 @@ allprojects {
 }
 
 afterEvaluate {
-    println("====afterEvaluate=====")
+    println("====afterEvaluate===")
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
     delete "${rootProject.projectDir}/temp"
     delete "${rootProject.projectDir}/temp.txt"
-    println("====clean end=====")
+    rootProject.projectDir.listFiles().findAll{
+        File file ->
+            if(file.path.contains("app:")){
+                file.delete()
+            }
+    }
+    println("===clean end===")
 }
 
-apply plugin: 'com.skullmind.io.plugins.DemoPlugin'
 
 
 

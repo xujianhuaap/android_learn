@@ -1,9 +1,11 @@
+import com.skullmind.io.tasks.FirstTask
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.skullmind.io.plugins.DemoPlugin'
 
 android {
     compileSdkVersion  versions.compileSdk
@@ -86,12 +88,17 @@ dependencies {
 afterEvaluate {
     tasks.matching {Task task -> task.name == "printDependencies"}.forEach({
         Task t ->
+            println("app after evaluate")
             t.dependsOn(tasks.getByName("clean"))
     })
 }
 
 task printDependencies(type:Copy){
-    println("====print")
+    println("=== print dependencies ===")
     from "${rootProject.projectDir}/settings.gradle"
     into "${rootProject.projectDir}/temp/"
 }
+
+//task firstTask(type:FirstTask){
+//
+//}
