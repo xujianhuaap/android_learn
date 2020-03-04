@@ -1,11 +1,10 @@
 package com.skullmind.io.plugins
 
 import com.skullmind.io.tasks.FirstTask
-import org.apache.tools.ant.types.resources.First
+import com.skullmind.io.tasks.TimeTask
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-
 
 public class DemoPlugin implements Plugin<Project> {
     @Override
@@ -13,21 +12,12 @@ public class DemoPlugin implements Plugin<Project> {
         project.beforeEvaluate {
             println("before evaluate")
         }
-        project.task("printTime"){
-            println("task [printTime] ${System.currentTimeMillis()}")
-            createTimeFile(project)
-        }
-
-        project.getTasks().create("firstTask", FirstTask.class,new Action<FirstTask>() {
+        project.tasks.create("timeTask",TimeTask.class,new Action<TimeTask>() {
             @Override
-            void execute(FirstTask t) {
-                t.action()
+            void execute(TimeTask t) {
+//                t.project = project
             }
         })
-    }
-
-    void createTimeFile(Project project){
-        File file = new File("${project.projectDir}${ File.pathSeparator }${System.currentTimeMillis()}.txt")
-        if(!file.exists()) file.createNewFile()
+        project.tasks.create("firstTask", FirstTask.class)
     }
 }

@@ -30,7 +30,7 @@ allprojects {
 }
 
 afterEvaluate {
-    println("====afterEvaluate===")
+    println("=== :project:afterEvaluate===")
 }
 
 task clean(type: Delete) {
@@ -40,11 +40,12 @@ task clean(type: Delete) {
     rootProject.projectDir.listFiles().findAll{
         File file ->
             if(file.path.contains("app:")){
-                file.delete()
+                delete file.path
             }
     }
     println("===clean end===")
 }
+
 
 
 

@@ -1,4 +1,6 @@
 import com.skullmind.io.tasks.FirstTask
+import com.skullmind.io.tasks.TimeTask
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -88,16 +90,17 @@ dependencies {
 afterEvaluate {
     tasks.matching {Task task -> task.name == "printDependencies"}.forEach({
         Task t ->
-            println("app after evaluate")
+            println("=== :app:afterEvaluate ===")
             t.dependsOn(tasks.getByName("clean"))
     })
 }
 
 task printDependencies(type:Copy){
-    println("=== print dependencies ===")
+    println("=== :app:printDependencies ===")
     from "${rootProject.projectDir}/settings.gradle"
     into "${rootProject.projectDir}/temp/"
 }
+
 
 //task firstTask(type:FirstTask){
 //
