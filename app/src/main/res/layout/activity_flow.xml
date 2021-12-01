@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:flow_wrapMode="chain"
+            app:flow_horizontalStyle="spread_inside"
+            app:flow_horizontalGap="@dimen/dimen_10_dp"
+            android:orientation="horizontal"
+            app:constraint_referenced_ids="tv_content_1,tv_content_2,tv_content_3"/>
+
+
+    <TextView
+            android:id="@+id/tv_content_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textColor="@android:color/holo_red_dark"
+            android:text="1234"
+            tools:layout_editor_absoluteY="16dp"
+            tools:layout_editor_absoluteX="-12dp" />
+
+    <TextView
+            android:id="@+id/tv_content_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_green_dark"
+            android:text="abcd"/>
+    <TextView
+            android:id="@+id/tv_content_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_blue_dark"
+            android:text="abc"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
