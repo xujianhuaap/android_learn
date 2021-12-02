@@ -7,38 +7,78 @@
 
     <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:flow_maxElementsWrap="3"
             app:flow_wrapMode="chain"
             app:flow_horizontalStyle="spread_inside"
-            app:flow_horizontalGap="@dimen/dimen_10_dp"
-            android:orientation="horizontal"
-            app:constraint_referenced_ids="tv_content_1,tv_content_2,tv_content_3"/>
+            app:flow_verticalGap="@dimen/dimen_30_dp"
+            app:flow_verticalAlign="top"
+            app:flow_horizontalAlign="center"
+            app:constraint_referenced_ids="tv_content_1,
+            tv_content_2,tv_content_3,
+            tv_content_4,tv_content_5,tv_content_6"/>
 
 
     <TextView
             android:id="@+id/tv_content_1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-
+            app:layout_constraintStart_toStartOf="@id/container"
+            app:layout_constraintEnd_toStartOf="@+id/tv_content_2"
             android:textColor="@android:color/holo_red_dark"
-            android:text="1234"
-            tools:layout_editor_absoluteY="16dp"
-            tools:layout_editor_absoluteX="-12dp" />
+            android:text="1234567890897889999654322"
+            app:layout_constraintWidth_percent="0.2" />
 
     <TextView
             android:id="@+id/tv_content_2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintStart_toEndOf="@id/tv_content_1"
+            app:layout_constraintEnd_toStartOf="@id/tv_content_3"
+            android:textColor="@android:color/holo_green_dark"
+            android:text="abcdefg"
+            tools:ignore="MissingConstraints" />
+    <TextView
+            android:id="@+id/tv_content_3"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintStart_toEndOf="@id/tv_content_2"
+            app:layout_constraintEnd_toStartOf="@id/tv_content_4"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_blue_dark"
+            android:text="abcdefghijklmn"/>
+
+    <TextView
+            android:id="@+id/tv_content_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:text="1234567890098754321"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintStart_toEndOf="@id/tv_content_3"
+            app:layout_constraintEnd_toStartOf="@id/tv_content_5"
+            tools:ignore="MissingConstraints" />
+
+    <TextView
+            android:id="@+id/tv_content_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintStart_toEndOf="@id/tv_content_4"
+            app:layout_constraintEnd_toStartOf="@id/tv_content_6"
             android:textColor="@android:color/holo_green_dark"
             android:text="abcd"/>
     <TextView
-            android:id="@+id/tv_content_3"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_content_6"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.2"
             android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tv_content_5"
+            app:layout_constraintEnd_toEndOf="@id/container"
             android:textColor="@android:color/holo_blue_dark"
-            android:text="abc"/>
+            android:text="abcefffghhjjjjjjkkkklllllll"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
