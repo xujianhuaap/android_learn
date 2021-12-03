@@ -3,7 +3,6 @@ package com.skullmind.io.dagger.module
 import androidx.databinding.DataBindingUtil
 import chat.rocket.android.dagger.scope.PerActivity
 import com.skullmind.io.R
-import com.skullmind.io.main.CameraModel
 import com.skullmind.io.databinding.ActivityMainBinding
 import com.skullmind.io.main.MainActivity
 import com.skullmind.io.main.MainModel
@@ -20,8 +19,4 @@ class MainModule{
     @Provides
     @PerActivity
     fun provideModel():MainModel = MainModel()
-
-    @Provides
-    @PerActivity
-    fun provideCameraModel(): CameraModel = CameraModel()
 }

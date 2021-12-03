@@ -5,53 +5,37 @@
                 name="model"
                 type="com.skullmind.io.main.MainModel"/>
         <variable
-                name="camera_model"
-                type="com.skullmind.io.main.CameraModel"/>
-        <variable
                 name="vm"
                 type="com.skullmind.io.main.MainVM"/>
     </data>
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-        <com.skullmind.io.view.FakeTextView
-                android:id="@+id/tv_click_count"
-                android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
+            android:layout_height="match_parent">
+          <androidx.constraintlayout.helper.widget.Flow
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  app:flow_maxElementsWrap="2"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:flow_wrapMode="chain"
+                  app:flow_horizontalStyle="spread"
+                  app:constraint_referenced_ids="tv_room_lesson,tv_room_basic"/>
+         <TextView
+                 android:id="@+id/tv_room_lesson"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textSize="@dimen/font_20_sp"
+                 app:layout_constraintTag="action"
+                 android:text="room 简介"/>
+
+        <TextView
+                android:id="@+id/tv_room_basic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@{30}"
-                app:backgroundColor="@{@color/colorPrimary}"
-                android:textSize="18sp"
-                android:text='@{@string/app_str_click_cnt(model.titleCnt,vm.getStatus(camera_model.openStatus))}'/>
-        <Button
-                android:id="@+id/tv_title"
-                android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:onClick="@{vm::clickTitle}"
-                android:text="@{model.title}"/>
-        <include
-                layout="@layout/include_camera_view"
-                android:id="@+id/ll_camera"
-                app:vm="@{vm}"></include>
-        <EditText
-                android:id="@+id/edt_user_name"
-                android:layout_width="@dimen/activity_item_width"
-                android:layout_height="wrap_content"
-                android:hint="default"
-                android:text="@={model.userName}"/>
-        <Button
-                android:id="@+id/tv_jump"
-                android:layout_marginTop="@dimen/dimen_main_activity_margin_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="@string/app_str_jump_next"/>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+                android:textSize="@dimen/font_20_sp"
+                app:layout_constraintTag="action"
+                android:text="room 基本使用"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
