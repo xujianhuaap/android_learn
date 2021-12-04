@@ -1,6 +1,7 @@
 package com.skullmind.io.dagger.module
 
 import chat.rocket.android.dagger.scope.PerActivity
+import com.skullmind.io.constraint.FlowActivity
 import com.skullmind.io.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -12,4 +13,11 @@ abstract class ActivityBuilder{
       MainModule::class
     ])
     abstract fun bindMainActivity(): MainActivity
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = [
+        ConstraintModule::class
+    ])
+
+    abstract fun bindConstraintActivity(): FlowActivity
 }

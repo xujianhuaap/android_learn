@@ -21,17 +21,18 @@
                   app:layout_constraintTop_toTopOf="parent"
                   app:flow_wrapMode="chain"
                   app:flow_horizontalStyle="spread"
-                  app:constraint_referenced_ids="tv_room_lesson,tv_room_basic"/>
+                  app:constraint_referenced_ids="tv_content_1,tv_content_2"/>
          <TextView
-                 android:id="@+id/tv_room_lesson"
+                 android:id="@+id/tv_content_1"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:textSize="@dimen/font_20_sp"
                  app:layout_constraintTag="action"
-                 android:text="room 简介"/>
+                 android:text="barrier 用例"
+                 android:onClick="@{()->vm.clickContent1()}"/>
 
         <TextView
-                android:id="@+id/tv_room_basic"
+                android:id="@+id/tv_content_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_20_sp"

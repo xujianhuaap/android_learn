@@ -1,84 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<layout>
+    <data>
 
-    <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/container"
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:flow_maxElementsWrap="3"
-            app:flow_wrapMode="chain"
-            app:flow_horizontalStyle="spread_inside"
-            app:flow_verticalGap="@dimen/dimen_30_dp"
-            app:flow_verticalAlign="top"
-            app:flow_horizontalAlign="center"
-            app:constraint_referenced_ids="tv_content_1,
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:flow_maxElementsWrap="3"
+                app:flow_wrapMode="chain"
+                app:flow_horizontalStyle="spread_inside"
+                app:flow_verticalGap="@dimen/dimen_30_dp"
+                app:flow_verticalAlign="top"
+                app:flow_horizontalAlign="center"
+                app:constraint_referenced_ids="tv_content_1,
             tv_content_2,tv_content_3,
             tv_content_4,tv_content_5,tv_content_6"/>
 
 
-    <TextView
-            android:id="@+id/tv_content_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/container"
-            app:layout_constraintEnd_toStartOf="@+id/tv_content_2"
-            android:textColor="@android:color/holo_red_dark"
-            android:text="1234567890897889999654322"
-            app:layout_constraintWidth_percent="0.2" />
+        <TextView
+                android:id="@+id/tv_content_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/container"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_2"
+                android:textColor="@android:color/holo_red_dark"
+                android:text="1234567890897889999654322"
+                app:layout_constraintWidth_percent="0.2" />
 
-    <TextView
-            android:id="@+id/tv_content_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintStart_toEndOf="@id/tv_content_1"
-            app:layout_constraintEnd_toStartOf="@id/tv_content_3"
-            android:textColor="@android:color/holo_green_dark"
-            android:text="abcdefg"
-            tools:ignore="MissingConstraints" />
-    <TextView
-            android:id="@+id/tv_content_3"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintStart_toEndOf="@id/tv_content_2"
-            app:layout_constraintEnd_toStartOf="@id/tv_content_4"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_blue_dark"
-            android:text="abcdefghijklmn"/>
+        <TextView
+                android:id="@+id/tv_content_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintStart_toEndOf="@id/tv_content_1"
+                app:layout_constraintEnd_toStartOf="@id/tv_content_3"
+                android:textColor="@android:color/holo_green_dark"
+                android:text="abcdefg"
+                tools:ignore="MissingConstraints" />
+        <TextView
+                android:id="@+id/tv_content_3"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintStart_toEndOf="@id/tv_content_2"
+                app:layout_constraintEnd_toStartOf="@id/tv_content_4"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_blue_dark"
+                android:text="abcdefghijklmn"/>
 
-    <TextView
-            android:id="@+id/tv_content_4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_dark"
-            android:text="1234567890098754321"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintStart_toEndOf="@id/tv_content_3"
-            app:layout_constraintEnd_toStartOf="@id/tv_content_5"
-            tools:ignore="MissingConstraints" />
+        <TextView
+                android:id="@+id/tv_content_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:text="1234567890098754321"
+                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintStart_toEndOf="@id/tv_content_3"
+                app:layout_constraintEnd_toStartOf="@id/tv_content_5"
+                tools:ignore="MissingConstraints" />
 
-    <TextView
-            android:id="@+id/tv_content_5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintStart_toEndOf="@id/tv_content_4"
-            app:layout_constraintEnd_toStartOf="@id/tv_content_6"
-            android:textColor="@android:color/holo_green_dark"
-            android:text="abcd"/>
-    <TextView
-            android:id="@+id/tv_content_6"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.2"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tv_content_5"
-            app:layout_constraintEnd_toEndOf="@id/container"
-            android:textColor="@android:color/holo_blue_dark"
-            android:text="abcefffghhjjjjjjkkkklllllll"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+                android:id="@+id/tv_content_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintStart_toEndOf="@id/tv_content_4"
+                app:layout_constraintEnd_toStartOf="@id/tv_content_6"
+                android:textColor="@android:color/holo_green_dark"
+                android:text="abcd"/>
+        <TextView
+                android:id="@+id/tv_content_6"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.2"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/tv_content_5"
+                app:layout_constraintEnd_toEndOf="@id/container"
+                android:textColor="@android:color/holo_blue_dark"
+                android:text="abcefffghhjjjjjjkkkklllllll"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

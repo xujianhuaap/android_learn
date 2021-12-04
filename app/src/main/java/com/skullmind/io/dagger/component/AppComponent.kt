@@ -4,6 +4,7 @@ import android.app.Application
 import com.skullmind.io.LearnApplication
 import com.skullmind.io.dagger.module.ActivityBuilder
 import com.skullmind.io.dagger.module.AppModule
+import com.skullmind.io.dagger.module.ConstraintModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -11,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AppModule::class,
+    ConstraintModule::class,
     ActivityBuilder::class
 ])
 interface AppComponent{
