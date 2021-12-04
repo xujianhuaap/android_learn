@@ -4,4 +4,11 @@
     <string name="app_str_jump_next">跳转</string>
     <string name="app_str_current_user">当前用户【%s】</string>
     <string name="app_str_item_info">姓名【%s】,git id 【%s】</string>
+
+    <string name="activity_flow_content_1">apple</string>
+    <string name="activity_flow_content_2">orange</string>
+    <string name="activity_flow_content_3">banana</string>
+    <string name="activity_flow_content_4">pear</string>
+    <string name="activity_flow_content_5">watermelon</string>
+    <string name="activity_flow_content_6">durian</string>
 </resources>

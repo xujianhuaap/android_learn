@@ -8,11 +8,11 @@ import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 
-fun toFlowActivity(activity:AppCompatActivity){
-    activity.startActivity(Intent(activity,FlowActivity::class.java))
+fun toFlowActivity(activity: AppCompatActivity) {
+    activity.startActivity(Intent(activity, FlowActivity::class.java))
 }
 
-class FlowActivity:AppCompatActivity() {
+class FlowActivity : AppCompatActivity() {
     @Inject
     lateinit var binding: ActivityFlowBinding
     override fun onCreate(savedInstanceState: Bundle?) {
