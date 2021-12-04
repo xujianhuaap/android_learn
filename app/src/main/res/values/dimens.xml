@@ -8,6 +8,8 @@
     <dimen name="dimen_10_dp">10dp</dimen>
     <dimen name="dimen_20_dp">20dp</dimen>
     <dimen name="dimen_30_dp">30dp</dimen>
+    <dimen name="dimen_150_dp">150dp</dimen>
+    <dimen name="dimen_100_dp">100dp</dimen>
 
     <dimen name="activity_item_width">120dp</dimen>
 </resources>

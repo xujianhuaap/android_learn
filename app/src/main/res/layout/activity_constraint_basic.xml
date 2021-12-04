@@ -10,7 +10,7 @@
                 android:id="@+id/tv_content_1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="使用宽高比例，实现view的宽高约束"
+                android:text="@string/activity_constraint_basic_content_1"
                 android:textSize="@dimen/font_20_sp"
                 android:textColor="@android:color/white"
                 android:background="@color/color_blue_0277bd"
@@ -22,7 +22,7 @@
                 android:id="@+id/tv_content_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="constraint width 的使用"
+                android:text="@string/activity_constraint_basic_content_2"
                 android:textSize="@dimen/font_20_sp"
                 android:textColor="@android:color/white"
                 android:background="@color/color_green_2e_7d32"
@@ -31,5 +31,42 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_content_1"/>
+        <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:barrierMargin="@dimen/dimen_30_dp"
+                app:constraint_referenced_ids="edt_content,edt_content_second"/>
+        <EditText
+                android:id="@+id/edt_content"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_100_dp"
+                android:inputType="text"
+                android:hint="@string/activity_constraint_basic_edt_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_min="@dimen/dimen_150_dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_2"/>
+
+        <EditText
+                android:id="@+id/edt_content_second"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_100_dp"
+                android:inputType="text"
+                android:hint="@string/activity_constraint_basic_edt_content_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_min="@dimen/dimen_150_dp"
+                app:layout_constraintTop_toBottomOf="@+id/edt_content"/>
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="挡板之外的内容"
+                android:background="#FFEB3B"
+                android:paddingTop="@dimen/dimen_30_dp"
+                android:paddingBottom="@dimen/dimen_30_dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_content_2"
+                app:layout_constraintStart_toEndOf="@+id/barrier"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

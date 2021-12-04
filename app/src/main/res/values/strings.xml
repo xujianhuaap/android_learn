@@ -13,4 +13,8 @@
     <string name="activity_flow_content_6">durian</string>
     <string name="activity_main_content_1">flow 用例</string>
     <string name="activity_main_content_2">Constraint 基本使用</string>
+    <string name="activity_constraint_basic_content_1">使用宽高比例，实现view的宽高约束</string>
+    <string name="activity_constraint_basic_content_2">constraint width 的使用</string>
+    <string name="activity_constraint_basic_edt_content">请输入必要的信息</string>
+    <string name="activity_constraint_basic_edt_content_2">备注信息</string>
 </resources>
