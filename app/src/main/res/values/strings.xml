@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">AndroidLearn</string>
-    <string name="app_str_click_cnt">点击【%d】次,相机处于【%s】状态</string>
+    <string name="app_str_click_cnt">点击【%d】次</string>
     <string name="app_str_jump_next">跳转</string>
     <string name="app_str_current_user">当前用户【%s】</string>
     <string name="app_str_item_info">姓名【%s】,git id 【%s】</string>
