@@ -1,4 +1,4 @@
-package com.skullmind.io.dagger.module
+package com.skullmind.io.dagger.module.constraint
 
 import androidx.databinding.DataBindingUtil
 import chat.rocket.android.dagger.scope.PerActivity
@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ConstraintModule {
+class FlowModule {
     @PerActivity
     @Provides
     fun provideBinding(activity: FlowActivity): ActivityFlowBinding = DataBindingUtil.setContentView(activity, R.layout.activity_flow)

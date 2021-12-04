@@ -1,4 +1,4 @@
-package com.skullmind.io.dagger.module
+package com.skullmind.io.dagger.module.main
 
 import androidx.databinding.DataBindingUtil
 import chat.rocket.android.dagger.scope.PerActivity
