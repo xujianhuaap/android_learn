@@ -28,7 +28,7 @@
                  android:layout_height="wrap_content"
                  android:textSize="@dimen/font_20_sp"
                  app:layout_constraintTag="action"
-                 android:text="barrier 用例"
+                 android:text="@string/activity_main_content_1"
                  android:onClick="@{()->vm.clickContent1()}"/>
 
         <TextView
@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_20_sp"
                 app:layout_constraintTag="action"
-                android:text="room 基本使用"/>
+                android:text="@string/activity_main_content_2"
+                android:onClick="@{()->vm.clickContent2()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

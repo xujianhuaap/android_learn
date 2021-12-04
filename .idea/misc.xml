@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_constraint_basic.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_flow.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/layout_divider_line.xml" value="0.10461956521739131" />

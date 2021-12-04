@@ -11,4 +11,6 @@
     <string name="activity_flow_content_4">pear</string>
     <string name="activity_flow_content_5">watermelon</string>
     <string name="activity_flow_content_6">durian</string>
+    <string name="activity_main_content_1">flow 用例</string>
+    <string name="activity_main_content_2">Constraint 基本使用</string>
 </resources>
