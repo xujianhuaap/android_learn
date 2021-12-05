@@ -1,6 +1,5 @@
 package com.skullmind.io.dagger.module.constraint
 
-import android.app.Activity
 import androidx.databinding.DataBindingUtil
 import chat.rocket.android.dagger.scope.PerActivity
 import com.skullmind.io.R
@@ -13,5 +12,6 @@ import dagger.Provides
 class MotionModule {
     @Provides
     @PerActivity
-    fun provideBinding(activity: MotionActivity):ActivityMotionBinding = DataBindingUtil.setContentView(activity, R.layout.activity_motion)
+    fun provideBinding(activity: MotionActivity): ActivityMotionBinding =
+        DataBindingUtil.setContentView(activity, R.layout.activity_motion)
 }
