@@ -13,4 +13,8 @@ class MainVM @Inject constructor(
     fun clickContent2(){
         navigation.jumpToConstraintBasicActivity()
     }
+
+    fun clickContent3(){
+        navigation.jumpToMotionActivity()
+    }
 }

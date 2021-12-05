@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".constraint.FlowActivity"/>
         <activity android:name=".constraint.ConstraintBasicActivity"/>
+        <activity android:name=".constraint.MotionActivity"/>
     </application>
 
 </manifest>

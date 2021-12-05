@@ -17,4 +17,6 @@
     <string name="activity_constraint_basic_content_2">constraint width 的使用</string>
     <string name="activity_constraint_basic_edt_content">请输入必要的信息</string>
     <string name="activity_constraint_basic_edt_content_2">备注信息</string>
+    <string name="activity_constraint_layout_tv_tip">挡板之外的内容</string>
+    <string name="activity_main_content_3">motion 布局使用</string>
 </resources>

@@ -6,6 +6,7 @@ import com.skullmind.io.dagger.module.ActivityBuilder
 import com.skullmind.io.dagger.module.AppModule
 import com.skullmind.io.dagger.module.constraint.ConstraintModule
 import com.skullmind.io.dagger.module.constraint.FlowModule
+import com.skullmind.io.dagger.module.constraint.MotionModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -15,6 +16,7 @@ import javax.inject.Singleton
     AppModule::class,
     FlowModule::class,
     ConstraintModule::class,
+    MotionModule::class,
     ActivityBuilder::class
 ])
 interface AppComponent{
