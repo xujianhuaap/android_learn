@@ -10,7 +10,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_20_sp"
                 android:padding="@dimen/dimen_10_dp"
-                android:textColor="@color/color_green_2e_7d32"
+                android:gravity="center"
+                android:background="@color/color_green_2e_7d32"
+                android:textColor="@android:color/white"
                 android:text="Yoo"/>
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
