@@ -65,7 +65,7 @@
                 motion:layout_constraintBottom_toBottomOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
                 motion:layout_constraintTop_toTopOf="parent" >
-            <CustomAttribute motion:attributeName="background"
+            <CustomAttribute motion:attributeName="backgroundColor"
                     motion:customColorValue="@color/color_blue_0277bd"></CustomAttribute>
 
         </Constraint>
