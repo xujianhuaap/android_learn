@@ -1,41 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
                 name="model"
-                type="com.skullmind.io.main.MainModel"/>
+                type="com.skullmind.io.main.MainModel" />
+
         <variable
                 name="vm"
-                type="com.skullmind.io.main.MainVM"/>
+                type="com.skullmind.io.main.MainVM" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-          <androidx.constraintlayout.helper.widget.Flow
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  app:flow_maxElementsWrap="2"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toTopOf="parent"
-                  app:flow_wrapMode="chain"
-                  app:flow_horizontalStyle="spread"
-                  app:constraint_referenced_ids="tv_room_lesson,tv_room_basic"/>
-         <TextView
-                 android:id="@+id/tv_room_lesson"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textSize="@dimen/font_20_sp"
-                 app:layout_constraintTag="action"
-                 android:text="room 简介"/>
+
+        <androidx.constraintlayout.helper.widget.Flow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:flow_maxElementsWrap="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:flow_wrapMode="aligned"
+                app:flow_horizontalStyle="spread"
+                app:constraint_referenced_ids="tv_content_1,tv_content_2" />
 
         <TextView
-                android:id="@+id/tv_room_basic"
+                android:id="@+id/tv_content_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_20_sp"
                 app:layout_constraintTag="action"
-                android:text="room 基本使用"/>
+                android:onClick="@{()->vm.clickContent1()}"
+                android:text="room 简介" />
+
+        <TextView
+                android:id="@+id/tv_content_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_20_sp"
+                app:layout_constraintTag="action"
+                android:text="room 基本使用" />
+
+        <TextView
+                android:id="@+id/tv_content_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_20_sp"
+                android:background="@android:color/holo_orange_dark"
+                app:layout_constraintTag="action"
+                android:onClick="@{()->vm.clickContent3()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/activity_main_tv_3" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

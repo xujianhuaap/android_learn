@@ -6,6 +6,7 @@ import com.skullmind.io.R
 import com.skullmind.io.databinding.ActivityMainBinding
 import com.skullmind.io.main.MainActivity
 import com.skullmind.io.main.MainModel
+import com.skullmind.io.main.MainNavigation
 import dagger.Module
 import dagger.Provides
 
@@ -19,4 +20,10 @@ class MainModule{
     @Provides
     @PerActivity
     fun provideModel():MainModel = MainModel()
+
+    @Provides
+    @PerActivity
+    fun provideNavigation(activity: MainActivity):MainNavigation = activity
+
+
 }

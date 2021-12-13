@@ -6,5 +6,6 @@
     <dimen name="font_18_sp">18sp</dimen>
     <dimen name="font_20_sp">20sp</dimen>
     <dimen name="dimen_10_dp">10dp</dimen>
+    <dimen name="dimen_50_dp">50dp</dimen>
     <dimen name="activity_item_width">120dp</dimen>
 </resources>

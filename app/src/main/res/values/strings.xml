@@ -4,4 +4,5 @@
     <string name="app_str_jump_next">跳转</string>
     <string name="app_str_current_user">当前用户【%s】</string>
     <string name="app_str_item_info">姓名【%s】,git id 【%s】</string>
+    <string name="activity_main_tv_3">popwindow 基本使用</string>
 </resources>
