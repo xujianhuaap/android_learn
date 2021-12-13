@@ -11,6 +11,14 @@
                 motion:touchAnchorId="@+id/button"
                 motion:touchAnchorSide="middle"
                 motion:dragDirection="dragRight" />
+
+        <KeyFrameSet>
+            <KeyPosition
+                    motion:keyPositionType="pathRelative"
+                    motion:percentY="-0.5"
+                    motion:framePosition="50"
+                    motion:motionTarget="@id/button"/>
+        </KeyFrameSet>
     </Transition>
 
     <Transition
@@ -23,6 +31,14 @@
                 motion:touchAnchorId="@+id/button"
                 motion:touchAnchorSide="middle"
                 motion:dragDirection="dragLeft" />
+
+        <KeyFrameSet>
+            <KeyPosition
+                    motion:keyPositionType="pathRelative"
+                    motion:percentY="-0.5"
+                    motion:framePosition="50"
+                    motion:motionTarget="@id/button"/>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
