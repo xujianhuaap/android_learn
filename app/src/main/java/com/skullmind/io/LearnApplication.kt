@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class LearnApplication:Application(),HasActivityInjector{
     @Inject
-    lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>;
+    lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
     @Inject
     lateinit var mContext:Context;
     override fun onCreate() {

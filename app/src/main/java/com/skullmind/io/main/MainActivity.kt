@@ -18,7 +18,10 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var model: MainModel
 
-
+    @Inject
+    lateinit var student: Student
+    @Inject
+    lateinit var studentAgain: Student
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
