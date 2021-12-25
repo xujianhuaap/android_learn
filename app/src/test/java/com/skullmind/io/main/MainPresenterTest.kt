@@ -11,10 +11,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import org.robolectric.shadow.api.Shadow
 import org.robolectric.shadows.ShadowApplication
 import java.util.regex.Pattern
 
@@ -28,7 +26,7 @@ class MainPresenterTest{
 
     @Test
     fun clickToJumpGithub(){
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
+        ActivityScenario.launch(PersonActivity::class.java).onActivity {
             it.findViewById<TextView>(R.id.tv_jump).performClick()
             val expect = Intent(it,GitHubActivity::class.java)
             val actual = ShadowApplication.getInstance().nextStartedActivity
@@ -38,7 +36,7 @@ class MainPresenterTest{
 
     @Test
     fun clickTitle(){
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
+        ActivityScenario.launch(PersonActivity::class.java).onActivity {
             val tvClickCount = it.findViewById<TextView>(R.id.tv_click_count)
             val btnTitle = it.findViewById<Button>(R.id.tv_title)
             assert(tvClickCount.visibility == View.VISIBLE)

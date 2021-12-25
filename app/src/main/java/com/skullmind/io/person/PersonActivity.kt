@@ -1,26 +1,33 @@
-package com.skullmind.io.main
+package com.skullmind.io.person
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.skullmind.io.databinding.ActivityMainBinding
-import com.skullmind.io.person.startPersonActivity
+import com.skullmind.io.databinding.ActivityPersonBinding
+import com.skullmind.io.main.Student
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(),MainNavigation {
+fun startPersonActivity(activity: AppCompatActivity){
+    Intent(activity,PersonActivity::class.java).run {
+        activity.startActivity(this)
+    }
+}
+class PersonActivity : AppCompatActivity() {
 
 
     @Inject
-    lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityPersonBinding
 
     @Inject
-    lateinit var vm: MainVM
+    lateinit var vm: PersonVm
 
     @Inject
-    lateinit var model: MainModel
+    lateinit var model: PersonModel
 
     @Inject
     lateinit var student: Student
+
     @Inject
     lateinit var studentAgain: Student
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +43,5 @@ class MainActivity : AppCompatActivity(),MainNavigation {
         binding.model = this.model
     }
 
-
-    override fun jumpToPersonActivity() {
-        startPersonActivity(this)
-    }
 
 }

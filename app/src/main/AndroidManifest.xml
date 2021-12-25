@@ -20,8 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".github.GitHubActivity"></activity>
-        <activity android:name=".camera.CameraActivity"></activity>
+        <activity android:name=".person.PersonActivity"></activity>
     </application>
 
 </manifest>

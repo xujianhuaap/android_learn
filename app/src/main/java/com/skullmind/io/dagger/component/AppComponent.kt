@@ -4,6 +4,7 @@ import android.app.Application
 import com.skullmind.io.LearnApplication
 import com.skullmind.io.dagger.module.ActivityBuilder
 import com.skullmind.io.dagger.module.AppModule
+import com.skullmind.io.main.Student
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -19,6 +20,8 @@ interface AppComponent{
     interface Builder{
         @BindsInstance
         fun application(application:Application):Builder
+        @BindsInstance
+        fun person(student: Student):Builder
         fun build():AppComponent
     }
 

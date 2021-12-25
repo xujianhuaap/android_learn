@@ -2,15 +2,21 @@ package com.skullmind.io.main
 
 import android.util.Log
 import androidx.databinding.BaseObservable
+import dagger.Reusable
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class MainModel() : BaseObservable() {
+class MainModel @Inject constructor() : BaseObservable() {
 
 }
 
-class Student @Inject constructor() {
+interface Person
+@Reusable
+class Student @Inject constructor():Person {
+    var index = 0
     init {
-        Log.d("-->","Student init")
+        index ++
+        Log.d("-->","Student init $index")
     }
 }
