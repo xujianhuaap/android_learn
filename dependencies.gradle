@@ -2,6 +2,7 @@ ext{
     versions = [
             // For project configuration
             java                  : JavaVersion.VERSION_1_8,
+            guava                 : '29.0-android',
             minSdk                : 21,
             compileSdk            : 28,
             targetSdk             : 28,
@@ -30,6 +31,7 @@ ext{
 
     libraries=[
              // For App
+            guava: "com.google.guava:guava:${versions.guava}",
              kotlin                 :"org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
              kotlin_reflect        :"org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}",
              dagger                : "com.google.dagger:dagger:${versions.dagger}",
