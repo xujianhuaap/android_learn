@@ -11,8 +11,14 @@ import dagger.Reusable
 import javax.inject.Singleton
 
 @Module
- class AppModule{
+class AppModule{
     @Provides
     @Singleton
     fun provideContext(app:Application): Context = app
+
+
+}
+@Module
+abstract class AppConfigModule{
+   @Binds  abstract fun providePerson(student: Student):Person
 }
