@@ -60,6 +60,8 @@ dependencies {
     implementation  libraries.recycler_view
     implementation libraries.lifecycle
 
+    implementation libraries.glide
+    annotationProcessor libraries.glideProcessor
 
 
     testImplementation libraries.junit
