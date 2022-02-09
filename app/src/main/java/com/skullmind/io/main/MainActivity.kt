@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private fun initData() {
         binding.vm = this.vm
         binding.model = this.model
-        binding.vm!!.initData()
     }
 
 

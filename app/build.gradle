@@ -55,7 +55,7 @@ dependencies {
     implementation libraries.adapter_rxjava
     implementation libraries.rxandroid
 
-    implementation libraries.appcompat_v7
+    implementation libraries.appcompat
     implementation libraries.constraint_layout
     implementation  libraries.recycler_view
     implementation libraries.lifecycle
