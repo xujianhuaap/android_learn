@@ -6,7 +6,7 @@ ext {
             compileSdk           : 28,
             targetSdk            : 28,
             buildTools           : '28.0.3',
-            gradle               : '3.4.2',
+            gradle               : '4.2.0',
 
             //For APP
             constraint_layout    : '2.1.3',
