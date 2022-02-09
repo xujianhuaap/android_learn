@@ -61,7 +61,7 @@ dependencies {
     implementation libraries.lifecycle
 
     implementation libraries.glide
-    annotationProcessor libraries.glideProcessor
+    kapt libraries.glideProcessor
 
 
     testImplementation libraries.junit
