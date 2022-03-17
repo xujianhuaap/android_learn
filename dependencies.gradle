@@ -23,7 +23,7 @@ ext{
             android_support       : '28.0.0',
             recycler_view          : '1.0.0',
             lifecycle              : '2.1.0',
-            android_test_runner   : '1.0.2',
+            android_test_runner   : '1.1.0',
             android_test_espresso : '3.0.2',
 
     ]
@@ -55,7 +55,7 @@ ext{
             power_mock_api          : "org.powermock:powermock-api-mockito2:1.7.3",
             power_mock_classloading : "org.powermock:powermock-classloading-xstream:1.7.3",
             test_core               : "androidx.test:core:1.0.0-beta02",
-            android_test_runner     : "androidx.test.runner.AndroidJUnitRunner:${versions.android_test_runner}",
+            android_test_runner     : "androidx.test:runner:${versions.android_test_runner}",
             espresso_core           : "androidx.test.espresso:espresso-core:${versions.android_test_espresso}"
     ]
 }
