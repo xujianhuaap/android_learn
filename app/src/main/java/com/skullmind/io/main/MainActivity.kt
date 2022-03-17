@@ -1,6 +1,5 @@
 package com.skullmind.io.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,19 +8,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
 
-@SuppressLint("RestrictedApi")
 class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SimpleComposable()
+            PreviewMessageCard()
         }
+    }
+
+    @Composable
+    fun MessageCard(name: String) {
+        Text(text = "Hello $name!")
     }
 
     @Preview
     @Composable
-    fun SimpleComposable() {
-        Text("Hello World")
+    fun PreviewMessageCard() {
+        MessageCard("Android")
     }
 }
