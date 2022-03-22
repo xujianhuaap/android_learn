@@ -1,14 +1,17 @@
 package com.skullmind.io.main.widget
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,26 +19,34 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.skullmind.io.main.MainViewModel
-import com.skullmind.io.main.menu_config.ConfigItem
+import com.skullmind.io.main.vo.ConfigItem
 
-object MainPage {
+object MainConfigMenu {
     @Composable
-    fun MainPageView(modifier: Modifier,viewModel: MainViewModel) {
-        Column(
-            modifier = modifier.then(
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.LightGray)
-
+    fun showTipDialog(state: MutableState<Pair<Boolean, ConfigItem>>) {
+        if (state.value.first) {
+            AlertDialog(
+                onDismissRequest = { state.value = Pair(false, state.value.second) },
+                confirmButton = {
+                    Button(
+                        onClick = { state.value = Pair(false, state.value.second) },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.DarkGray,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text("确认")
+                    }
+                },
+                text = {
+                    Text(
+                        text = "欢迎使用南航${state.value.second.title}服务",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                title = { Text("南航服务菜单") }
             )
-        ) {
-
-            ConfigMenu(data = viewModel.getMenuSources()){
-                Log.d("MainPage",it.title)
-            }
         }
-
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -63,7 +74,7 @@ object MainPage {
     }
 
     @Composable
-    fun MenuItem(@DrawableRes logoId: Int, content: String, onClick: () -> Unit) {
+    private fun MenuItem(@DrawableRes logoId: Int, content: String, onClick: () -> Unit) {
         Column(
             modifier = Modifier
                 .border(

@@ -1,7 +1,8 @@
-package com.skullmind.io.main.menu_config
+package com.skullmind.io.main.vo
 
+import android.os.Parcelable
 import com.skullmind.io.R
-import java.io.Serializable
+import kotlinx.android.parcel.Parcelize
 
 
 const val KEY_CHECKIN = "选座登记" // 选座&办登机牌
@@ -63,4 +64,7 @@ fun getMenuData() = listOf(
 
 )
 
-data class ConfigItem(val title: String, val link: String, val resId: Int) : Serializable
+@Parcelize
+data class ConfigItem(val title: String, val link: String, val resId: Int) : Parcelable
+
+

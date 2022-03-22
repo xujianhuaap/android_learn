@@ -2,6 +2,7 @@ package com.skullmind.io.main.widget
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -25,14 +26,15 @@ private const val ACTIVITY_LABEL_MINE = "我"
 
 object MainBottomNavigationBar {
     @Composable
-    fun BottomNavigationBar(initSelectedIndex: Int) {
+    fun BottomNavigationBar(initSelectedIndex: Int,onSelect:(Int) -> Unit) {
         val selectedIndexState  = remember {
             mutableStateOf(initSelectedIndex)
         }
         val selectHandler:(Int) -> Unit = {
             selectedIndexState.value = it
+            onSelect(it)
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Row(modifier = Modifier.fillMaxWidth().background(color = Color.LightGray), horizontalArrangement = Arrangement.SpaceEvenly) {
             TaleItem(
                 content = ACTIVITY_LABEL_HOME, logoId = R.mipmap.launcher_footer_icon1_normol,
                 if (selectedIndexState.value == 0) Color(0xFF226CC9) else Color.Black,

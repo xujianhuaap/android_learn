@@ -1,0 +1,14 @@
+package com.skullmind.io.pages
+
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+
+object SchedulePage {
+    @Composable
+    fun ScheduleView(modifier: Modifier){
+        Text("行程页面",modifier = modifier,fontSize = 40.sp,textAlign = TextAlign.Center)
+    }
+}
