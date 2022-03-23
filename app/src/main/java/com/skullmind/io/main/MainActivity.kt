@@ -7,14 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.skullmind.io.main.widget.MainBottomNavigationBar.BottomNavigationBar
 import com.skullmind.io.pages.MainPage.MainPageView
 import com.skullmind.io.pages.MinePage.MinePageView
-import com.skullmind.io.pages.SchedulePage
 import com.skullmind.io.pages.SchedulePage.ScheduleView
 import com.skullmind.io.pages.ServiceHallPage.ServiceHallView
 
@@ -47,6 +48,12 @@ class MainActivity : AppCompatActivity() {
                 pageState.value = it
             }
         }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun SchedulePagePreview(){
+        ScheduleView(modifier = Modifier.fillMaxWidth().fillMaxHeight())
     }
 
 

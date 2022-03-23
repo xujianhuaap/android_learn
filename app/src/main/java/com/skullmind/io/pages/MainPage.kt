@@ -1,13 +1,12 @@
 package com.skullmind.io.pages
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.skullmind.io.R
 import com.skullmind.io.main.MainViewModel
 import com.skullmind.io.main.vo.ConfigItem
@@ -25,22 +24,22 @@ object MainPage {
                 )
             )
         }
-
-        Column(
+        Surface(
             modifier = modifier.then(
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.LightGray)
-
+                Modifier.fillMaxWidth()
             )
         ) {
 
-            ConfigMenu(data = viewModel.getMenuSources()) {
-                showTipDialogState.value = Pair(true, it)
-            }
+            Column {
 
-            showTipDialog(state = showTipDialogState)
+                ConfigMenu(data = viewModel.getMenuSources()) {
+                    showTipDialogState.value = Pair(true, it)
+                }
+
+                showTipDialog(state = showTipDialogState)
+            }
         }
+
 
     }
 
