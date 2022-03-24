@@ -25,22 +25,27 @@ import java.util.*
 
 object ScheduleItemView {
     @Composable
-    fun ScheduleItemView(modifier: Modifier) {
-        val depDate = Date(122, 2, 24, 12, 50)
-        val arrDate = Date(122, 2, 24, 15, 0)
-        val flightInfo = FlightInfo(
-            "广州", "汕头", "广州白云", "揭阳潮汕", "CZ9834",
-            depDate = depDate, arrDate, "78421578900", "NB41G1"
-        )
-        DateView(formatDate(depDate))
+    fun ScheduleItemView(flightInfo: FlightInfo) {
+
+        DateView(formatDate(flightInfo.depDate))
         LinkLineView()
         FlightInfoView(flightInfo = flightInfo)
+        DividerView()
 
     }
 
     @Composable
+    private fun DividerView() {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .height(30.dp)) {}
+    }
+
+    @Composable
     private fun TicketInfoView(flightInfo: FlightInfo) {
-        ConstraintLayout(modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)) {
+        ConstraintLayout(modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp)) {
             val (ticketNo, bookNo) = createRefs()
             Text("客票号：${flightInfo.ticketNO}", Modifier.constrainAs(ticketNo) {
                 top.linkTo(parent.top, 5.dp)

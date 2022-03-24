@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             verticalArrangement = Arrangement.Bottom
         ) {
             when(pageState.value){
-                1 -> ScheduleView(Modifier.weight(1.0f))
+                1 -> ScheduleView(Modifier.weight(1.0f),viewModel = viewModel)
                 2 -> ServiceHallView(Modifier.weight(1.0f))
                 3 -> MinePageView(Modifier.weight(1.0f))
                 else -> MainPageView(Modifier.weight(1.0f), viewModel)
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     @Preview(showBackground = true)
     @Composable
     fun SchedulePagePreview(){
-        ScheduleView(modifier = Modifier.fillMaxWidth().fillMaxHeight())
+//        ScheduleView(modifier = Modifier.fillMaxWidth().fillMaxHeight(),viewModel = )
     }
 
 
