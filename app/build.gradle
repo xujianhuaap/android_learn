@@ -79,6 +79,7 @@ dependencies {
     // Material Design
     implementation libraries.compose_material
 
+    implementation  libraries.compose_contraintlayout
     // Integration with observables
     implementation libraries.compose_runtime_rxjava
     implementation("androidx.compose.runtime:runtime-rxjava2:1.0.5")
