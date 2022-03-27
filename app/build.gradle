@@ -54,7 +54,7 @@ dependencies {
     implementation  libraries.retrofit
     implementation  libraries.retrofit_gson
     implementation (libraries.adapter_rxjava){
-        exclude module:"io.reactivex"
+        exclude group:'io.reactivex', module: 'rxjava'
     }
     implementation libraries.rxandroid
 
