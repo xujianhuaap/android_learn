@@ -21,4 +21,7 @@ object Net {
 interface User {
     @GET("users/{username}")
     fun getInfo(@Path("username") username:String):Observable<JsonObject>
+
+    @GET("users/{username}/repos")
+    fun getRepos(@Path("username") username:String):Observable<JsonObject>
 }
