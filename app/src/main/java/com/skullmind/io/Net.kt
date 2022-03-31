@@ -1,5 +1,6 @@
 package com.skullmind.io
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.Retrofit
@@ -23,5 +24,5 @@ interface User {
     fun getInfo(@Path("username") username:String):Observable<JsonObject>
 
     @GET("users/{username}/repos")
-    fun getRepos(@Path("username") username:String):Observable<JsonObject>
+    fun getRepos(@Path("username") username:String):Observable<JsonArray>
 }
