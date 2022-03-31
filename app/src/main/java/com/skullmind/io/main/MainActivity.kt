@@ -2,39 +2,127 @@ package com.skullmind.io.main
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.skullmind.io.Net
-import com.skullmind.io.R
 import com.skullmind.io.User
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
+private const val CASE_ZIP = 0
+
+private const val CASE_AMB = 1
+
+private const val CASE_JUST = 2
+
+private const val CASE_CONCAT = 4
+
+private const val CASE_MERGE = 5
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {
+
+            functionDescButton()
+        }
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        val info = Net.createService(User::class.java).getInfo("defunkt").subscribeOn(Schedulers.io())
-        val repos = Net.createService(User::class.java).getRepos("defunkt").subscribeOn(Schedulers.io())
-        fullInfo(info,repos).subscribe(MyObserver())
+    @Composable
+    fun functionDescButton(){
+        Button(onClick = { testRxjava()}) {
+            Text(text = "test rxjava")
+        }
     }
 
-    private fun fullInfo(info: Observable<JsonObject>,repo: Observable<JsonArray>) =
-        Observable.zip(info,repo,this::zipOperator,true)
+
+    private fun testRxjava() {
+        when (CASE_MERGE) {
+            CASE_ZIP ->
+                zipExample()
+            CASE_AMB ->
+                ambExample()
+            CASE_JUST ->
+                justExample()
+            CASE_CONCAT ->
+                concatExample()
+            CASE_MERGE ->
+                mergeExample()
+            else ->
+                zipExample()
+        }
+    }
+
+    /***
+     * 多个操作异步并行执行，那个先返回先执行，
+     */
+    private fun mergeExample() {
+        val info = getInfoObservable().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+        val infoForXu = getInfoObservable("xujianhuaap").subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+        Observable.merge(listOf(info,infoForXu)).subscribe(MyObserver())
+    }
+
+    private fun justExample() {
+        Observable.just(JsonObject()).subscribe(MyObserver())
+    }
+
+    /***
+     * 操作结果按照操作的发起先后顺序执行
+     */
+    private fun concatExample() {
+        val info = getInfoObservable().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+        val infoForXu = getInfoObservable("xujianhuaap").subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+       Observable.concat(listOf(info,infoForXu)).subscribe(MyObserver())
+    }
+
+    /**
+     * 只接受一个异步操作，其他的会遗弃不再处理
+     */
+    private fun ambExample() {
+        val info = getInfoObservable()
+        val infoForXu = getInfoObservable("xujianhuaap")
+        Observable.amb(listOf(info,infoForXu)).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
+    }
+
+    /***
+     * 若干个异步操作，返回的数据流， 重新组装为新的数据
+     */
+    private fun zipExample() {
+        val info1 = getInfoObservable()
+        val repos1 = getRepoObservable()
+        Observable.zip(info1, repos1, this::zipOperator, true).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
+    }
 
 
-    private fun zipOperator(info:JsonObject, repos:JsonArray):JsonObject = JsonObject().apply {
+    private fun zipOperator(info:JsonObject,repo:JsonArray):JsonObject = JsonObject().apply {
          this.add("info",info)
-         this.add("repos",repos)
+         this.add("repo",repo)
+    }
+
+
+    private fun getRepoObservable(name: String = "defunkt"): @NonNull Observable<JsonArray> {
+        return Net.createService(User::class.java).getRepos(name).subscribeOn(Schedulers.io())
+    }
+
+    private fun getInfoObservable(name: String = "defunkt"): @NonNull Observable<JsonObject> {
+        return Net.createService(User::class.java).getInfo(name).subscribeOn(Schedulers.io())
     }
 
 }
