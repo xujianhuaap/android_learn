@@ -68,11 +68,12 @@ class MainActivity : AppCompatActivity() {
      * 多个操作异步并行执行，那个先返回先执行，
      */
     private fun mergeExample() {
-        val info = getInfoObservable().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-        val infoForXu = getInfoObservable("xujianhuaap").subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-        Observable.merge(listOf(info,infoForXu)).subscribe(MyObserver())
+        val info = getInfoObservable()
+
+        val infoForXu = getInfoObservable("xujianhuaap")
+
+        Observable.merge(listOf(info,infoForXu)).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
     }
 
     private fun justExample() {
@@ -83,11 +84,10 @@ class MainActivity : AppCompatActivity() {
      * 操作结果按照操作的发起先后顺序执行
      */
     private fun concatExample() {
-        val info = getInfoObservable().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-        val infoForXu = getInfoObservable("xujianhuaap").subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-       Observable.concat(listOf(info,infoForXu)).subscribe(MyObserver())
+        val info = getInfoObservable()
+        val infoForXu = getInfoObservable("xujianhuaap")
+       Observable.concat(listOf(info,infoForXu)).subscribeOn(Schedulers.io())
+           .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
     }
 
     /**
