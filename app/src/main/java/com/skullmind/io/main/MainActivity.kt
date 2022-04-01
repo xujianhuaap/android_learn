@@ -28,6 +28,10 @@ private const val CASE_CONCAT = 4
 
 private const val CASE_MERGE = 5
 
+private const val CASE_MAP = 6
+
+private const val CASE_FILTER = 7
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun testRxjava() {
-        when (CASE_MERGE) {
+        when (CASE_FILTER) {
             CASE_ZIP ->
                 zipExample()
             CASE_AMB ->
@@ -59,8 +63,33 @@ class MainActivity : AppCompatActivity() {
                 concatExample()
             CASE_MERGE ->
                 mergeExample()
+            CASE_MAP ->
+                mapExample()
+            CASE_FILTER ->
+                filterExample()
             else ->
                 zipExample()
+        }
+    }
+
+    private fun filterExample() {
+        val info = getInfoObservable()
+        val infoForXu = getInfoObservable("xujianhuaap")
+        Observable.merge(listOf(info,infoForXu)).filter {
+            it.get("login").asString != "xujianhuaap"
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
+    }
+
+    /***
+     * map 转换
+     */
+
+    private fun mapExample() {
+        getInfoObservable("xujianhuaap").concatMap<String> {
+            Observable.just(it.get("login").asString)
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
+            Log.d("-->", "$it")
         }
     }
 
