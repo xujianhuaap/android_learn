@@ -32,6 +32,9 @@ private const val CASE_MAP = 6
 
 private const val CASE_FILTER = 7
 
+private const val CASE_WINDOW = 8
+
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +47,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun functionDescButton(){
-        Button(onClick = { testRxjava()}) {
+    fun functionDescButton() {
+        Button(onClick = { testRxjava() }) {
             Text(text = "test rxjava")
         }
     }
@@ -67,15 +70,27 @@ class MainActivity : AppCompatActivity() {
                 mapExample()
             CASE_FILTER ->
                 filterExample()
+            CASE_WINDOW ->
+                windowExample()
             else ->
                 zipExample()
         }
     }
 
+    private fun windowExample() {
+        Observable.merge(listOf(getInfoObservable(), getInfoObservable("xujianhuaap")))
+            .window(2)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe{
+
+
+            }
+    }
+
     private fun filterExample() {
         val info = getInfoObservable()
         val infoForXu = getInfoObservable("xujianhuaap")
-        Observable.merge(listOf(info,infoForXu)).filter {
+        Observable.merge(listOf(info, infoForXu)).filter {
             it.get("login").asString != "xujianhuaap"
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
@@ -101,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         val infoForXu = getInfoObservable("xujianhuaap")
 
-        Observable.merge(listOf(info,infoForXu)).subscribeOn(Schedulers.io())
+        Observable.merge(listOf(info, infoForXu)).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
     }
 
@@ -115,8 +130,8 @@ class MainActivity : AppCompatActivity() {
     private fun concatExample() {
         val info = getInfoObservable()
         val infoForXu = getInfoObservable("xujianhuaap")
-       Observable.concat(listOf(info,infoForXu)).subscribeOn(Schedulers.io())
-           .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
+        Observable.concat(listOf(info, infoForXu)).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
     }
 
     /**
@@ -125,7 +140,7 @@ class MainActivity : AppCompatActivity() {
     private fun ambExample() {
         val info = getInfoObservable()
         val infoForXu = getInfoObservable("xujianhuaap")
-        Observable.amb(listOf(info,infoForXu)).subscribeOn(Schedulers.io())
+        Observable.amb(listOf(info, infoForXu)).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(MyObserver())
     }
 
@@ -140,9 +155,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun zipOperator(info:JsonObject,repo:JsonArray):JsonObject = JsonObject().apply {
-         this.add("info",info)
-         this.add("repo",repo)
+    private fun zipOperator(info: JsonObject, repo: JsonArray): JsonObject = JsonObject().apply {
+        this.add("info", info)
+        this.add("repo", repo)
     }
 
 
