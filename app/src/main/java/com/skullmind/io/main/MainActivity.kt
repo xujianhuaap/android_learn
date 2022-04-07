@@ -50,11 +50,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun SchedulePagePreview(){
-//        ScheduleView(modifier = Modifier.fillMaxWidth().fillMaxHeight(),viewModel = )
-    }
+
 
 
 }

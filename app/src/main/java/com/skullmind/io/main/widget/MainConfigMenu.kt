@@ -3,8 +3,8 @@ package com.skullmind.io.main.widget
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -53,7 +53,7 @@ object MainConfigMenu {
     @Composable
     fun ConfigMenu(data: List<ConfigItem>, onClick: (ConfigItem) -> Unit) {
         LazyVerticalGrid(
-            cells = GridCells.Fixed(4),
+            columns = GridCells.Fixed(4),
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color.White)
