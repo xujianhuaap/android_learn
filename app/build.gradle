@@ -51,10 +51,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation libraries.kotlin
     implementation libraries.kotlin_reflect
     implementation libraries.dagger
-    implementation libraries.daggerSupport
+    implementation (libraries.daggerSupport)
     kapt libraries.daggerAndroidApt
     kapt libraries.daggerProcessor
 
@@ -83,6 +84,11 @@ dependencies {
     implementation  libraries.compose_contraintlayout
     // Integration with observables
     implementation libraries.compose_runtime_rxjava
+
+    implementation("io.coil-kt:coil-compose:2.0.0-rc02"){
+        exclude group: 'androidx.appcompat',module:'appcompat-resources'
+    }
+    implementation "com.google.accompanist:accompanist-pager:0.15.0"
 
 
     testImplementation libraries.junit

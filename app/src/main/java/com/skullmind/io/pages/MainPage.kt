@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import com.skullmind.io.R
 import com.skullmind.io.main.MainViewModel
 import com.skullmind.io.main.vo.ConfigItem
+import com.skullmind.io.main.vo.getAdvertisements
 import com.skullmind.io.main.widget.MainConfigMenu.ConfigMenu
 import com.skullmind.io.main.widget.MainConfigMenu.showTipDialog
+import com.skullmind.io.main.widget.MainTopAdvertisement.ViewPager
 
 object MainPage {
     @Composable
@@ -31,7 +33,7 @@ object MainPage {
         ) {
 
             Column {
-
+                ViewPager(getAdvertisements())
                 ConfigMenu(data = viewModel.getMenuSources()) {
                     showTipDialogState.value = Pair(true, it)
                 }
@@ -44,3 +46,4 @@ object MainPage {
     }
 
 }
+
