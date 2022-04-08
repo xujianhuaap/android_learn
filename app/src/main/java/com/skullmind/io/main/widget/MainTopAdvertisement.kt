@@ -1,6 +1,5 @@
 package com.skullmind.io.main.widget
 
-import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,27 +7,23 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle.Companion.Italic
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.*
 import com.skullmind.io.R
 import com.skullmind.io.main.vo.AdvertisementVo
 import com.skullmind.io.main.vo.getDefaultAdvertisement
+import kotlinx.coroutines.delay
 
 object MainTopAdvertisement {
     @OptIn(ExperimentalPagerApi::class)
@@ -43,9 +38,34 @@ object MainTopAdvertisement {
             initialPageOffset = 0f, initialOffscreenLimit = 3, infiniteLoop = true
         )
 
-        HorizontalPager(state = pageState) {
-            PagerFrame(datas, pagerState = pageState, clickItemState = clickItemState)
+        LaunchedEffect(Unit) {
+            while (true) {
+                delay(1000 * 3)
+                if (!clickItemState.value.first) pageState.animateScrollToPage((pageState.currentPage + 1))
+            }
+
         }
+
+        ConstraintLayout() {
+            val (pagerRef, pagerIndicatorRef) = createRefs()
+            HorizontalPager(state = pageState, modifier = Modifier.constrainAs(pagerRef) {
+
+
+            }) {
+                PagerFrame(datas, pagerState = pageState, clickItemState = clickItemState)
+            }
+
+            HorizontalPagerIndicator(
+                pagerState = pageState,
+                activeColor = Color(0xFF03A9F4),
+                inactiveColor = Color(0xFFABA5A5),
+                modifier = Modifier.constrainAs(pagerIndicatorRef) {
+
+                    bottom.linkTo(pagerRef.bottom,10.dp)
+                    centerHorizontallyTo(parent)
+                })
+        }
+
         showAdvertisementDialog(clickItemState)
     }
 
@@ -75,7 +95,7 @@ object MainTopAdvertisement {
                 .build(),
             contentDescription = data.title,
             modifier = Modifier
-                .fillMaxHeight(0.25f)
+                .fillMaxHeight(0.3f)
                 .fillMaxWidth(),
             placeholder = painterResource(id = R.mipmap.ic_default_advertisement),
             contentScale = ContentScale.Crop

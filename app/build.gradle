@@ -89,6 +89,7 @@ dependencies {
         exclude group: 'androidx.appcompat',module:'appcompat-resources'
     }
     implementation "com.google.accompanist:accompanist-pager:0.15.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.15.0"
 
 
     testImplementation libraries.junit
