@@ -1,34 +1,58 @@
 package com.skullmind.io.main.widget
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.skullmind.io.main.vo.NoticeVo
 
 @Composable
-fun MarqueeView() {
+fun MarqueeView(datas: List<NoticeVo>, initIndex: Int) {
     val infiniteTransition = rememberInfiniteTransition()
     val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.2f,
-        targetValue = 1f,
+        initialValue = 0f,
+        targetValue = 1.1f,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
-                durationMillis = 1000
-                0.7f at 500
+                durationMillis = 4000
+                delayMillis = 100
             },
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Restart
         )
     )
-    Text(
-        text = "123", modifier = Modifier
-            .fillMaxWidth()
-            .height(30.dp)
-            .background(Color(0xFF03A9F4).copy(alpha = alpha))
-    )
+
+
+    MarqueeContainer(alpha, datas, initIndex = initIndex)
+
 }
+
+@Composable
+private fun MarqueeContainer(alpha: Float, datas: List<NoticeVo>, initIndex: Int) {
+
+    var index by remember {
+        mutableStateOf(initIndex)
+    }
+    if (alpha >= 1f) {
+        index = (index + 1) % datas.size
+
+    }
+    Row(modifier = Modifier.padding(start = (LocalConfiguration.current.screenWidthDp * alpha).dp)) {
+        Button(
+            onClick = { },
+            contentPadding = PaddingValues(0.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent
+            ),
+
+            elevation = ButtonDefaults.elevation(0.dp)
+        ) {
+            Text(text = datas[index].title, maxLines = 1)
+        }
+
+    }
+}
+

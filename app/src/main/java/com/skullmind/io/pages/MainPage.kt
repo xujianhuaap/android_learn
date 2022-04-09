@@ -11,6 +11,7 @@ import com.skullmind.io.R
 import com.skullmind.io.main.MainViewModel
 import com.skullmind.io.main.vo.ConfigItem
 import com.skullmind.io.main.vo.getAdvertisements
+import com.skullmind.io.main.vo.getNotices
 import com.skullmind.io.main.widget.MainConfigMenu.ConfigMenu
 import com.skullmind.io.main.widget.MainConfigMenu.showTipDialog
 import com.skullmind.io.main.widget.MainTopAdvertisement.ViewPager
@@ -35,7 +36,7 @@ object MainPage {
 
             Column {
                 ViewPager(getAdvertisements())
-                MarqueeView()
+                MarqueeView(getNotices(),0)
                 ConfigMenu(data = viewModel.getMenuSources()) {
                     showTipDialogState.value = Pair(true, it)
                 }
