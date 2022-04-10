@@ -4,7 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class NoticeVo(val title:String,val link:String):Parcelable
+ class NoticeVo(val title:String,val link:String):Parcelable,DialogVo {
+    override fun getTitleContent(): String  = title
+}
 
 fun getNotices() = listOf<NoticeVo>(
     NoticeVo("南航新会员活动","https://"),
