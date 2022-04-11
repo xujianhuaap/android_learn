@@ -1,70 +1,97 @@
 package com.skullmind.io.main.widget
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.Log
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.skullmind.io.main.vo.NoticeVo
-import kotlinx.coroutines.delay
 
 @Composable
-fun MarqueeView(datas: List<NoticeVo>, initIndex: Int) {
+fun MarqueeView(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float) {
 
 
-    MarqueeContainer(datas, initIndex = initIndex)
+    MarqueeContainer(datas, initIndex = initIndex, screenWidth)
 
 }
 
 @Composable
-private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int) {
+private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float) {
 
     var index by remember {
         mutableStateOf(initIndex)
     }
 
-    var paddingOffset by remember {
-        mutableStateOf(0f)
+
+    val transition = rememberInfiniteTransition()
+    val value by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 4000
+                delayMillis =0
+            },
+            repeatMode = RepeatMode.Restart
+        )
+
+    )
+
+    var enable by remember {
+        mutableStateOf(true)
     }
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(15)
-            paddingOffset += 0.6f
+
+    if (value > 0.99f) {
+        if(enable){
+            enable = false
+            index = (index + 1) % datas.size
         }
+
     }
+
+    if(value < 0.01f){
+        enable = true
+    }
+
+    Log.d("-->", "value: $value - $index")
+
+
 
     val clickState = remember {
         mutableStateOf(Pair(false, datas[0]))
     }
 
-    Row(
-        modifier = Modifier
-            .padding(
-                start = paddingOffset.dp,
-            )
-    ) {
-        Text(
-            text = datas[index].title,
-            maxLines = 1,
-            modifier = Modifier.padding(vertical = 5.dp),
-            overflow = TextOverflow.Clip,
-            onTextLayout = {
-                if (it.size.width == 0) {
-                    index = (index + 1) % datas.size
-                    paddingOffset = 0f
-                }
-                Log.d("-->", "text width ${it.size.width}")
-            }
 
-        )
+    val paint by remember {
+        mutableStateOf(Paint().apply {
+            color = Color.parseColor("#FF000000")
+            isAntiAlias = true
+            textSize = 40f
+        })
     }
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(30.dp)
+    ) {
+        drawIntoCanvas {
+            it.nativeCanvas.drawText(
+                datas[index].title,
+                value * (screenWidth + paint.measureText(datas[index].title)) - paint.measureText(
+                    datas[index].title
+                ),
+                center.y,
+                paint
+            )
+        }
+    }
+
 
     showDialog(clickItemState = clickState)
 }

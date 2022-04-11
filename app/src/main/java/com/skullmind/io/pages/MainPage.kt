@@ -1,5 +1,6 @@
 package com.skullmind.io.pages
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Surface
@@ -7,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import com.skullmind.io.R
 import com.skullmind.io.main.MainViewModel
 import com.skullmind.io.main.vo.ConfigItem
@@ -36,7 +39,7 @@ object MainPage {
 
             Column {
                 ViewPager(getAdvertisements())
-                MarqueeView(getNotices(),0)
+                MarqueeView(getNotices(),0,screenWidth = LocalConfiguration.current.screenWidthDp* Resources.getSystem().displayMetrics.density)
                 ConfigMenu(data = viewModel.getMenuSources()) {
                     showTipDialogState.value = Pair(true, it)
                 }
