@@ -5,24 +5,26 @@ import android.graphics.Paint
 import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
+import com.skullmind.io.error.startErrorActivity
 import com.skullmind.io.main.vo.NoticeVo
 
 @Composable
-fun MarqueeView(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float) {
+fun MarqueeView(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click:()->Unit) {
 
 
-    MarqueeContainer(datas, initIndex = initIndex, screenWidth)
+    MarqueeContainer(datas, initIndex = initIndex, screenWidth,click)
 
 }
 
 @Composable
-private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float) {
+private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click: () -> Unit) {
 
     var index by remember {
         mutableStateOf(initIndex)
@@ -79,6 +81,9 @@ private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth:
         modifier = Modifier
             .fillMaxWidth()
             .height(30.dp)
+            .clickable {
+                click()
+            }
     ) {
         drawIntoCanvas {
             it.nativeCanvas.drawText(

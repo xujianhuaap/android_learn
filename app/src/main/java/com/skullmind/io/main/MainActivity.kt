@@ -15,14 +15,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.skullmind.io.error.startErrorActivity
 import com.skullmind.io.main.widget.MainBottomNavigationBar.BottomNavigationBar
+import com.skullmind.io.pages.MainNavigator
 import com.skullmind.io.pages.MainPage.MainPageView
 import com.skullmind.io.pages.MinePage.MinePageView
 import com.skullmind.io.pages.SchedulePage.ScheduleView
 import com.skullmind.io.pages.ServiceHallPage.ServiceHallView
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),MainNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         setContent {
             mainView(viewModel = viewModel)
         }
+    }
+
+    override fun marqueeClick() {
+        startErrorActivity(this)
     }
 
     @Composable
@@ -43,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 1 -> ScheduleView(Modifier.weight(1.0f),viewModel = viewModel)
                 2 -> ServiceHallView(Modifier.weight(1.0f))
                 3 -> MinePageView(Modifier.weight(1.0f))
-                else -> MainPageView(Modifier.weight(1.0f), viewModel)
+                else -> MainPageView(Modifier.weight(1.0f), viewModel,this@MainActivity)
             }
 
             BottomNavigationBar(initSelectedIndex = 0) {

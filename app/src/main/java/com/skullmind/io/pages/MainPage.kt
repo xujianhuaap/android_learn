@@ -22,7 +22,7 @@ import com.skullmind.io.main.widget.MarqueeView
 
 object MainPage {
     @Composable
-    fun MainPageView(modifier: Modifier, viewModel: MainViewModel) {
+    fun MainPageView(modifier: Modifier, viewModel: MainViewModel, mainNavigator: MainNavigator) {
         val showTipDialogState = remember {
             mutableStateOf(
                 Pair(
@@ -39,7 +39,13 @@ object MainPage {
 
             Column {
                 ViewPager(getAdvertisements())
-                MarqueeView(getNotices(),0,screenWidth = LocalConfiguration.current.screenWidthDp* Resources.getSystem().displayMetrics.density)
+                MarqueeView(
+                    getNotices(),
+                    0,
+                    screenWidth = LocalConfiguration.current.screenWidthDp * Resources.getSystem().displayMetrics.density,
+                ){
+                    mainNavigator.marqueeClick()
+                }
                 ConfigMenu(data = viewModel.getMenuSources()) {
                     showTipDialogState.value = Pair(true, it)
                 }
@@ -51,5 +57,9 @@ object MainPage {
 
     }
 
+}
+
+interface MainNavigator {
+    fun marqueeClick()
 }
 
