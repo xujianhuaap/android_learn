@@ -6,7 +6,9 @@ import okio.source
 import java.io.File
 
 fun getErrorParentDir(application: Application): File {
-    return File(application.filesDir, "error")
+    return File(application.filesDir, "error").apply {
+        if(!exists()) createNewFile()
+    }
 }
 
 fun getErrorFiles(application: Application):Array<File>{
