@@ -16,7 +16,7 @@ import com.skullmind.io.error.startErrorActivity
 import com.skullmind.io.main.vo.NoticeVo
 
 @Composable
-fun MarqueeView(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click:()->Unit) {
+fun MarqueeView(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click:(NoticeVo)->Unit) {
 
 
     MarqueeContainer(datas, initIndex = initIndex, screenWidth,click)
@@ -24,7 +24,7 @@ fun MarqueeView(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click:
 }
 
 @Composable
-private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click: () -> Unit) {
+private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth: Float,click: (NoticeVo) -> Unit) {
 
     var index by remember {
         mutableStateOf(initIndex)
@@ -82,7 +82,7 @@ private fun MarqueeContainer(datas: List<NoticeVo>, initIndex: Int, screenWidth:
             .fillMaxWidth()
             .height(30.dp)
             .clickable {
-                click()
+                click(datas[index])
             }
     ) {
         drawIntoCanvas {

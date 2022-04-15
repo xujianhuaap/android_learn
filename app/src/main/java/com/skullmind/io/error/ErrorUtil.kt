@@ -7,7 +7,7 @@ import java.io.File
 
 fun getErrorParentDir(application: Application): File {
     return File(application.filesDir, "error").apply {
-        if(!exists()) createNewFile()
+        if(!exists())mkdir()
     }
 }
 

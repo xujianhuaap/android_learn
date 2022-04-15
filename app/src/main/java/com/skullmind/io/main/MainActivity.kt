@@ -16,12 +16,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.skullmind.io.error.startErrorActivity
+import com.skullmind.io.main.vo.NoticeVo
 import com.skullmind.io.main.widget.MainBottomNavigationBar.BottomNavigationBar
 import com.skullmind.io.pages.MainNavigator
 import com.skullmind.io.pages.MainPage.MainPageView
 import com.skullmind.io.pages.MinePage.MinePageView
 import com.skullmind.io.pages.SchedulePage.ScheduleView
 import com.skullmind.io.pages.ServiceHallPage.ServiceHallView
+import com.skullmind.io.route.Route
 
 
 class MainActivity : AppCompatActivity(),MainNavigator {
@@ -34,8 +36,8 @@ class MainActivity : AppCompatActivity(),MainNavigator {
         }
     }
 
-    override fun marqueeClick() {
-        startErrorActivity(this)
+    override fun marqueeClick(noticeVo: NoticeVo) {
+        if(noticeVo.link == Route.ACTIVITY_ERROR) startErrorActivity(this)
     }
 
     @Composable

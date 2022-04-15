@@ -8,8 +8,9 @@ import androidx.compose.ui.unit.sp
 
 object MinePage {
     @Composable
+    @Throws(Error::class)
     fun MinePageView(modifier: Modifier){
-        throw RuntimeException("test error")
+        throw Error("test error")
         Text("个人页面",modifier = modifier,fontSize = 40.sp,textAlign = TextAlign.Center)
     }
 }

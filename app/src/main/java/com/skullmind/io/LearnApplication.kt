@@ -20,12 +20,12 @@ class LearnApplication : Application() {
 class AppExceptionMonitor(private val application: LearnApplication) : Thread.UncaughtExceptionHandler {
     override fun uncaughtException(t: Thread, e: Throwable) {
         val errorDir = getErrorParentDir(application)
-        if(!errorDir.exists()) errorDir.mkdir()
         val fileName = "error_".plus(SimpleDateFormat("yyyyMMddHHmmss").format(Date())).plus(".txt")
         val errorFile = File(errorDir,fileName)
         if(!errorFile.exists())errorFile.createNewFile()
         val fileOutStream = application.openFileOutput(errorFile.name, Context.MODE_PRIVATE)
         e.printStackTrace(PrintStream(fileOutStream))
+        Runtime.getRuntime().exit(-1)
     }
 
 
