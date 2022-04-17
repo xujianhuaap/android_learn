@@ -10,7 +10,6 @@ object MinePage {
     @Composable
     @Throws(Error::class)
     fun MinePageView(modifier: Modifier){
-        throw Error("test error")
         Text("个人页面",modifier = modifier,fontSize = 40.sp,textAlign = TextAlign.Center)
     }
 }

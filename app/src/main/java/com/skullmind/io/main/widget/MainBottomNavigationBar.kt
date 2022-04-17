@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skullmind.io.R
+import com.skullmind.io.theme.AppTheme
+import com.skullmind.io.theme.Theme
 
 private const val ACTIVITY_LABEL_HOME = "首页"
 private const val ACTIVITY_LABEL_SCHEDULE = "行程"
@@ -26,36 +29,46 @@ private const val ACTIVITY_LABEL_MINE = "我"
 
 object MainBottomNavigationBar {
     @Composable
-    fun BottomNavigationBar(initSelectedIndex: Int,onSelect:(Int) -> Unit) {
-        val selectedIndexState  = remember {
+    fun BottomNavigationBar(initSelectedIndex: Int, onSelect: (Int) -> Unit) {
+        val selectedIndexState = remember {
             mutableStateOf(initSelectedIndex)
         }
-        val selectHandler:(Int) -> Unit = {
+        val selectHandler: (Int) -> Unit = {
             selectedIndexState.value = it
             onSelect(it)
         }
-        Row(modifier = Modifier.fillMaxWidth().background(color = Color.LightGray), horizontalArrangement = Arrangement.SpaceEvenly) {
-            TaleItem(
-                content = ACTIVITY_LABEL_HOME, logoId = R.mipmap.launcher_footer_icon1_normol,
-                if (selectedIndexState.value == 0) Color(0xFF226CC9) else Color.Black,
-                selectHandler = selectHandler
-            )
-            TaleItem(
-                content = ACTIVITY_LABEL_SCHEDULE, logoId = R.mipmap.launcher_footer_icon2_normol,
-                if (selectedIndexState.value == 1) Color(0xFF226CC9) else Color.Black,
-                selectHandler = selectHandler
-            )
-            TaleItem(
-                content = ACTIVITY_LABEL_SERVICE_HALL, logoId = R.mipmap.launcher_footer_icon4_normol,
-                if (selectedIndexState.value == 2) Color(0xFF226CC9) else Color.Black,
-                selectHandler = selectHandler
-            )
-            TaleItem(
-                content = ACTIVITY_LABEL_MINE, R.mipmap.launcher_footer_icon5_normol,
-                if (selectedIndexState.value == 3) Color(0xFF226CC9) else Color.Black,
-                selectHandler = selectHandler
-            )
+        AppTheme(theme = Theme.Happy) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colors.background),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                TaleItem(
+                    content = ACTIVITY_LABEL_HOME, logoId = R.mipmap.launcher_footer_icon1_normol,
+                    if (selectedIndexState.value == 0) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                    selectHandler = selectHandler
+                )
+                TaleItem(
+                    content = ACTIVITY_LABEL_SCHEDULE,
+                    logoId = R.mipmap.launcher_footer_icon2_normol,
+                    if (selectedIndexState.value == 1) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                    selectHandler = selectHandler
+                )
+                TaleItem(
+                    content = ACTIVITY_LABEL_SERVICE_HALL,
+                    logoId = R.mipmap.launcher_footer_icon4_normol,
+                    if (selectedIndexState.value == 2) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                    selectHandler = selectHandler
+                )
+                TaleItem(
+                    content = ACTIVITY_LABEL_MINE, R.mipmap.launcher_footer_icon5_normol,
+                    if (selectedIndexState.value == 3) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                    selectHandler = selectHandler
+                )
+            }
         }
+
     }
 
     @Composable
@@ -81,11 +94,11 @@ object MainBottomNavigationBar {
             )
             Text(
                 text = content,
-                fontSize = 10.sp,
+                fontSize = 9.sp,
                 textAlign = TextAlign.Center,
                 color = tintColor,
                 modifier = Modifier
-                    .width(40.dp)
+                    .width(45.dp)
                     .align(Alignment.CenterHorizontally)
             )
 
