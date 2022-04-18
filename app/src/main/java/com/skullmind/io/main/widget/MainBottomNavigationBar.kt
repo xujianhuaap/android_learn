@@ -37,36 +37,34 @@ object MainBottomNavigationBar {
             selectedIndexState.value = it
             onSelect(it)
         }
-        AppTheme(theme = Theme.Happy) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = MaterialTheme.colors.background),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                TaleItem(
-                    content = ACTIVITY_LABEL_HOME, logoId = R.mipmap.launcher_footer_icon1_normol,
-                    if (selectedIndexState.value == 0) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
-                    selectHandler = selectHandler
-                )
-                TaleItem(
-                    content = ACTIVITY_LABEL_SCHEDULE,
-                    logoId = R.mipmap.launcher_footer_icon2_normol,
-                    if (selectedIndexState.value == 1) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
-                    selectHandler = selectHandler
-                )
-                TaleItem(
-                    content = ACTIVITY_LABEL_SERVICE_HALL,
-                    logoId = R.mipmap.launcher_footer_icon4_normol,
-                    if (selectedIndexState.value == 2) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
-                    selectHandler = selectHandler
-                )
-                TaleItem(
-                    content = ACTIVITY_LABEL_MINE, R.mipmap.launcher_footer_icon5_normol,
-                    if (selectedIndexState.value == 3) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
-                    selectHandler = selectHandler
-                )
-            }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colors.background),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TaleItem(
+                content = ACTIVITY_LABEL_HOME, logoId = R.mipmap.launcher_footer_icon1_normol,
+                if (selectedIndexState.value == 0) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                selectHandler = selectHandler
+            )
+            TaleItem(
+                content = ACTIVITY_LABEL_SCHEDULE,
+                logoId = R.mipmap.launcher_footer_icon2_normol,
+                if (selectedIndexState.value == 1) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                selectHandler = selectHandler
+            )
+            TaleItem(
+                content = ACTIVITY_LABEL_SERVICE_HALL,
+                logoId = R.mipmap.launcher_footer_icon4_normol,
+                if (selectedIndexState.value == 2) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                selectHandler = selectHandler
+            )
+            TaleItem(
+                content = ACTIVITY_LABEL_MINE, R.mipmap.launcher_footer_icon5_normol,
+                if (selectedIndexState.value == 3) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary,
+                selectHandler = selectHandler
+            )
         }
 
     }

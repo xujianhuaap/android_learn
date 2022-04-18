@@ -2,12 +2,47 @@ package com.skullmind.io.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
+import com.skullmind.io.theme.AppTheme.localColorFilter
 
 @Composable
-fun AppTheme( theme: Theme,content: @Composable () -> Unit) {
-    MaterialTheme(colors = getColors(theme = theme), content = content)
+fun AppTheme(theme: Theme, content: @Composable () -> Unit) {
+    CompositionLocalProvider(
+        localColorFilter provides remember {
+            getColorFilter(theme = theme)
+        }
+    ) {
+        MaterialTheme(colors = getColors(theme = theme), content = content)
+    }
+
+
+}
+
+object AppTheme {
+
+    val colorFilter: ColorFilter?
+        @Composable
+        @ReadOnlyComposable
+        get() = localColorFilter.current
+
+    internal val localColorFilter = staticCompositionLocalOf {
+        ColorMatrix().run {
+            ColorFilter.colorMatrix(this)
+        }
+
+    }
+
+}
+
+private fun getColorFilter(theme: Theme): ColorFilter {
+
+
+    return ColorFilter.colorMatrix(ColorMatrix().apply {
+        if (theme == Theme.Sad) setToSaturation(0f)
+    })
 }
 
 private fun getColors(theme: Theme) = when (theme) {

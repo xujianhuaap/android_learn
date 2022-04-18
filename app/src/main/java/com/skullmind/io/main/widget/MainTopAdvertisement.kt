@@ -3,10 +3,7 @@ package com.skullmind.io.main.widget
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +20,7 @@ import com.google.accompanist.pager.*
 import com.skullmind.io.R
 import com.skullmind.io.main.vo.AdvertisementVo
 import com.skullmind.io.main.vo.getDefaultAdvertisement
+import com.skullmind.io.theme.AppTheme
 import kotlinx.coroutines.delay
 
 object MainTopAdvertisement {
@@ -57,7 +55,7 @@ object MainTopAdvertisement {
 
             HorizontalPagerIndicator(
                 pagerState = pageState,
-                activeColor = Color(0xFF03A9F4),
+                activeColor = MaterialTheme.colors.primary,
                 inactiveColor = Color(0xFFABA5A5),
                 modifier = Modifier.constrainAs(pagerIndicatorRef) {
 
@@ -98,7 +96,8 @@ object MainTopAdvertisement {
                 .fillMaxHeight(0.3f)
                 .fillMaxWidth(),
             placeholder = painterResource(id = R.mipmap.ic_default_advertisement),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            colorFilter = AppTheme.colorFilter
 
         )
     }

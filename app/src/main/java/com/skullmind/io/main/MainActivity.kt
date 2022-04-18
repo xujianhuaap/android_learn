@@ -24,6 +24,8 @@ import com.skullmind.io.pages.MinePage.MinePageView
 import com.skullmind.io.pages.SchedulePage.ScheduleView
 import com.skullmind.io.pages.ServiceHallPage.ServiceHallView
 import com.skullmind.io.route.Route
+import com.skullmind.io.theme.AppTheme
+import com.skullmind.io.theme.Theme
 
 
 class MainActivity : AppCompatActivity(),MainNavigator {
@@ -32,7 +34,10 @@ class MainActivity : AppCompatActivity(),MainNavigator {
         super.onCreate(savedInstanceState)
         val viewModel: MainViewModel by viewModels()
         setContent {
-            mainView(viewModel = viewModel)
+            AppTheme(theme = Theme.Sad) {
+                mainView(viewModel = viewModel)
+            }
+
         }
     }
 

@@ -13,7 +13,7 @@ const val KEY_Mzhy = "明珠会员" // 明珠会员
 
 const val KEY_MALL = "南航商城" // 南航商城
 
-const val KEY_LoungeIn = "休息室预售" // 休息室预售
+const val KEY_LoungeIn = "休息室" // 休息室预售
 
 const val KEY_CabinUpgrade = "升舱" //升舱
 
