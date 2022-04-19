@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(),MainNavigator {
         super.onCreate(savedInstanceState)
         val viewModel: MainViewModel by viewModels()
         setContent {
-            AppTheme(theme = Theme.Sad) {
+            AppTheme(theme = Theme.Happy) {
                 mainView(viewModel = viewModel)
             }
 

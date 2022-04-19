@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.skullmind.io.R
 import com.skullmind.io.main.vo.FlightInfo
+import com.skullmind.io.theme.AppTheme
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -99,7 +101,8 @@ object ScheduleItemView {
                     painter = painterResource(id = resID),
                     contentDescription = title,
                     Modifier
-                        .size(20.dp, 20.dp)
+                        .size(20.dp, 20.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
 
                 )
 
@@ -147,7 +150,7 @@ object ScheduleItemView {
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(color = Color(0xFF4581B2)),
+                .background(color = MaterialTheme.colors.primary),
             verticalAlignment = Alignment.CenterVertically
         ) {
             flightDepCardInfo(flightInfo, Modifier.weight(1.0f))
@@ -274,7 +277,8 @@ object ScheduleItemView {
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp, 30.dp)
-                    .padding(5.dp)
+                    .padding(5.dp),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
             )
             Text(text = "$depCity-$arrCity", fontSize = 16.sp)
             Text(
@@ -303,7 +307,7 @@ object ScheduleItemView {
     private fun DateView(date: String) {
         Surface(
             shape = RoundedCornerShape(15, 15, 15, 15),
-            color = Color(0xFF587C8C)
+            color = MaterialTheme.colors.primary
         ) {
             Column() {
                 Text(

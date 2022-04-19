@@ -123,7 +123,7 @@ private fun darkColors(
     background: Color = Color.White,
     surface: Color = Color.White,
     error: Color = Color(0xFFB00020),
-    onPrimary: Color = Color.White,
+    onPrimary: Color = Color(0xFF8A8C8F),
     onSecondary: Color = Color.Black,
     onBackground: Color = Color.Black,
     onSurface: Color = Color.Black,
