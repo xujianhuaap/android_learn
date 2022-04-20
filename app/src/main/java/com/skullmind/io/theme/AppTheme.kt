@@ -28,6 +28,18 @@ object AppTheme {
         @ReadOnlyComposable
         get() = localColorFilter.current
 
+    val extraColors: ExtraColors
+        @Composable
+        @ReadOnlyComposable
+        get() = localExtraColors.current
+
+    internal val localExtraColors = staticCompositionLocalOf {
+        ExtraColors(
+            textPrimaryColor = Color(0xFF000000),
+            hintPrimaryColor = Color(0xFF6D6868)
+        )
+    }
+
     internal val localColorFilter = staticCompositionLocalOf {
         ColorMatrix().run {
             ColorFilter.colorMatrix(this)
@@ -36,6 +48,8 @@ object AppTheme {
     }
 
 }
+
+class ExtraColors(val textPrimaryColor: Color, val hintPrimaryColor: Color)
 
 private fun getColorFilter(theme: Theme): ColorFilter {
 
