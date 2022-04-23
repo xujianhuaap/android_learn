@@ -33,7 +33,7 @@ object AppTheme {
         @ReadOnlyComposable
         get() = localExtraColors.current
 
-    internal val localExtraColors = staticCompositionLocalOf {
+    private val localExtraColors = staticCompositionLocalOf {
         ExtraColors(
             textPrimaryColor = Color(0xFF000000),
             hintPrimaryColor = Color(0xFF6D6868)
