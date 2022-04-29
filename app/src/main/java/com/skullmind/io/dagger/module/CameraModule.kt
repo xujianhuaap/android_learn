@@ -1,7 +1,8 @@
 package com.skullmind.io.dagger.module;
 
 import android.content.Context;
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import chat.rocket.android.dagger.scope.PerActivity;
 import com.skullmind.io.camera.Camera;
 import com.skullmind.io.camera.CameraActivity
@@ -18,7 +19,7 @@ class CameraModule {
 
     @PerActivity
     @Provides
-    fun provideModel(activity:CameraActivity)=  ViewModelProviders.of(activity).get(CameraViewModel::class.java)
+    fun provideModel(activity:CameraActivity):ViewModel= ViewModelProvider(activity)[CameraViewModel::class.java]
 
     @PerActivity
     @Provides

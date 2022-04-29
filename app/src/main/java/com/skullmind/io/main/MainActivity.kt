@@ -3,9 +3,9 @@ package com.skullmind.io.main
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.skullmind.io.camera.newIntentToCamera
 import com.skullmind.io.databinding.ActivityMainBinding
 import com.skullmind.io.github.newIntentToGitHub
+import com.skullmind.io.news.newIntentToNewsActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(){
             jumpToGitHub(model.userName)
         }
         binding.llCamera.btnCamera.setOnClickListener{
-            jumpToCamera("Cannon")
+            jumpToNews("Cannon")
         }
 
     }
@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity(){
     fun jumpToGitHub(userName:String){
         startActivity(newIntentToGitHub(this,userName))
     }
-    fun jumpToCamera(cameraName:String){
-        startActivity(newIntentToCamera(this,cameraName))
+    fun jumpToNews(cameraName:String){
+        startActivity(newIntentToNewsActivity(this))
     }
 
 }

@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -83,7 +84,6 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
         ButterKnife.bind(this)
         val name = intent.getStringExtra(EXTRA_CAMERA)
-
         initSurfaceHolder()
 
         initViewModel(name)
