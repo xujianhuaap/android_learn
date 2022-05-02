@@ -1,4 +1,4 @@
-package com.skullmind.io.pages
+package com.skullmind.io.main.pages
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

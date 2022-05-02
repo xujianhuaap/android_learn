@@ -1,4 +1,4 @@
-package com.skullmind.io.pages
+package com.skullmind.io.main.pages
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntSize

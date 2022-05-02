@@ -36,7 +36,8 @@ object AppTheme {
     private val localExtraColors = staticCompositionLocalOf {
         ExtraColors(
             textPrimaryColor = Color(0xFF000000),
-            hintPrimaryColor = Color(0xFF6D6868)
+            hintPrimaryColor = Color(0xFF6D6868),
+            onTextPrimaryColor = Color(0xffffffff)
         )
     }
 
@@ -49,7 +50,7 @@ object AppTheme {
 
 }
 
-class ExtraColors(val textPrimaryColor: Color, val hintPrimaryColor: Color)
+class ExtraColors(val textPrimaryColor: Color,val onTextPrimaryColor:Color, val hintPrimaryColor: Color)
 
 private fun getColorFilter(theme: Theme): ColorFilter {
 
