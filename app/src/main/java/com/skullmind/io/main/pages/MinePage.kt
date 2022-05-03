@@ -6,6 +6,7 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.rotationMatrix
+import com.skullmind.io.main.widget.flexWindMill
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,47 +63,12 @@ object MinePage {
             launch {
                 while (true){
                     delay(20)
-                    rotateState.value += 5f
+                    rotateState.value = ((rotateState.value +5) %360)
                 }
             }
         }
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-
-                .graphicsLayer {
-                    scaleX = scaleState.value
-                    scaleY = scaleState.value
-                    rotationZ = rotateState.value
-                }
-                .transformable(state)
-                .background(Color.Transparent)
-        ) {
-            drawLeaf(Color.Yellow, Math.PI / 2)
-            drawLeaf(Color.Blue, Math.PI / 2, 90f)
-            drawLeaf(Color.Red, Math.PI / 2, 180f)
-            drawLeaf(Color.Green, Math.PI / 2, 270f)
-
-
-        }
+        flexWindMill(scaleState, rotateState, state)
     }
 
-    @Composable
-    private fun drawLeaf(color: Color, degree: Double, rotate: Float = 0f) {
-        Canvas(
-            modifier = Modifier
-                .size(200.dp)
-                .rotate(rotate)
-        ) {
-            val radius = (size.width / 2) * sin(degree / 2)
-            val x = (size.width / 2 - radius * sin(degree / 2)).toFloat()
-            val y = (radius * cos(degree / 2)).toFloat()
-            val offset = Offset(x, y)
-            val path = Path().apply {
-                val rect = Rect(offset, radius = radius.toFloat())
-                arcTo(rect = rect, -45f, 90f, true)
-            }
-            drawPath(path = path, color = color)
-        }
-    }
+
 }
