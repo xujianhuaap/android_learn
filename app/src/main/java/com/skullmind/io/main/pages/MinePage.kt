@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.rotationMatrix
+import com.skullmind.io.main.widget.SlideView
 import com.skullmind.io.main.widget.flexWindMill
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -35,15 +37,28 @@ object MinePage {
     @Composable
     @Throws(Error::class)
     fun MinePageView(modifier: Modifier) {
-        Column(
-            modifier = modifier.then(Modifier.fillMaxWidth()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text("个人页面", fontSize = 40.sp, textAlign = TextAlign.Center)
-            flexBox()
-        }
+        SlideView(
+            modifier = modifier,
+            slideContent = {
+                Text(
+                    text = "122",
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .fillMaxHeight()
+                        .background(MaterialTheme.colors.primary)
+                )
+            },
+            content = {
+                Column(
+                    modifier = modifier.then(Modifier.fillMaxWidth()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("个人页面", fontSize = 40.sp, textAlign = TextAlign.Center)
+                    flexBox()
 
+                }
+            })
     }
 
     @Composable
@@ -59,11 +74,11 @@ object MinePage {
         val rotateState = remember {
             mutableStateOf(0f)
         }
-        LaunchedEffect(key1 = Unit){
+        LaunchedEffect(key1 = Unit) {
             launch {
-                while (true){
+                while (true) {
                     delay(20)
-                    rotateState.value = ((rotateState.value +5) %360)
+                    rotateState.value = ((rotateState.value + 5) % 360)
                 }
             }
         }
