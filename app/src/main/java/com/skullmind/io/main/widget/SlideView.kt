@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
-fun SlideView(modifier: Modifier,content:@Composable () -> Unit,slideContent:@Composable () -> Unit) {
+fun SlideView(modifier: Modifier,content:@Composable () -> Unit,slideContent:@Composable () -> Unit,screenWidth:Int) {
     var dragX by remember {
         mutableStateOf(0f)
     }
@@ -24,13 +27,14 @@ fun SlideView(modifier: Modifier,content:@Composable () -> Unit,slideContent:@Co
 
     }
 
+
     ConstraintLayout(modifier = modifier.then(Modifier.fillMaxSize().pointerInput(Unit) {
         detectDragGestures(onDragStart = { dragX = 0f }, onDrag = { _, offset ->
             dragX += offset.x
-            isShow = dragX > 100f
-            Log.d("-->","onDrag $dragX")
+            isShow = dragX > screenWidth/5
+            Log.d("-->","onDrag $screenWidth")
         }, onDragEnd = {
-            isShow = dragX > 100f
+            isShow = dragX > screenWidth/5
         })
     })) {
         val (slideRef,contentRef) = createRefs()

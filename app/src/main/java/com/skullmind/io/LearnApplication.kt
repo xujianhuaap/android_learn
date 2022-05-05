@@ -7,13 +7,16 @@ import java.io.File
 import java.io.PrintStream
 import java.text.SimpleDateFormat
 import java.util.*
-
+fun getScreenWidth(context: Application) = context.resources.displayMetrics.widthPixels
 class LearnApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
         Thread.setDefaultUncaughtExceptionHandler(AppExceptionMonitor(this))
+
     }
+
+
 
 }
 

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.graphicsLayer
@@ -36,7 +37,7 @@ import kotlin.math.sin
 object MinePage {
     @Composable
     @Throws(Error::class)
-    fun MinePageView(modifier: Modifier) {
+    fun MinePageView(modifier: Modifier,screenWidth:Int) {
         SlideView(
             modifier = modifier,
             slideContent = {
@@ -58,7 +59,7 @@ object MinePage {
                     flexBox()
 
                 }
-            })
+            },screenWidth = screenWidth)
     }
 
     @Composable

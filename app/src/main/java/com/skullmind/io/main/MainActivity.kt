@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import com.skullmind.io.error.startErrorActivity
+import com.skullmind.io.getScreenWidth
 import com.skullmind.io.main.vo.NoticeVo
 import com.skullmind.io.main.widget.MainBottomNavigationBar.BottomNavigationBar
 import com.skullmind.io.main.pages.MainNavigator
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity(),MainNavigator {
             when(pageState.value){
                 1 -> ScheduleView(Modifier.weight(1.0f),viewModel = viewModel)
                 2 -> ServiceHallView(Modifier.weight(1.0f),serviceHallVM)
-                3 -> MinePageView(Modifier.weight(1.0f))
+                3 -> MinePageView(Modifier.weight(1.0f), getScreenWidth(application))
                 else -> MainPageView(Modifier.weight(1.0f), viewModel,this@MainActivity)
             }
 
